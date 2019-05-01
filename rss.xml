@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Lind.sh]]></title><description><![CDATA[Technical blog mostly about Operations development and development]]></description><link>https://lind.sh</link><generator>RSS for Node</generator><lastBuildDate>Wed, 01 May 2019 10:07:39 GMT</lastBuildDate><item><title><![CDATA[Getting a blog the hard way]]></title><description><![CDATA[The hard way is a path focused on learning, you should follow/replicate this if your aim is gaining knowledge. This post will serve as an…]]></description><link>https://lind.sh/getting-a-blog-the-hard-way/</link><guid isPermaLink="false">https://lind.sh/getting-a-blog-the-hard-way/</guid><pubDate>Sun, 10 Mar 2019 22:28:33 GMT</pubDate><content:encoded>&lt;p&gt;The hard way is a path focused on learning, you should follow/replicate this if your aim is gaining knowledge. This post will serve as an overview, while going into a bit more details for sections where there’s no separate post planned. Expect a lot of deep dives searching, especially if you do it before the detailed posts are available.&lt;/p&gt;
+&lt;p&gt;If you’re more interested in the end result, follow these steps instead:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Sign up for a hosted blog on ghost.org (atleast that’s the service I’d pick)&lt;/li&gt;
+&lt;li&gt;Buy a domain name&lt;/li&gt;
+&lt;li&gt;Sign up for a free Cloudflare account&lt;/li&gt;
+&lt;li&gt;Configure Cloudflare in front of your blog for some free goodies&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;Overdoing infrastructure&lt;/h1&gt;
+&lt;p&gt;First off, the reasonable hardware for running this blog and servicing the anticipated traffic is the equivalent of a raspberry pi, I probably can’t serve more traffic with this considering my uplink, but it’s serving it’s purpose of experimentation and learning well.&lt;/p&gt;
+&lt;h2&gt;Hardware&lt;/h2&gt;
+&lt;p&gt;You should get a mimimum of 2 hosts, Dell Poweredge r710 are a good choice, they’re really cheap(&amp;#x3C;€100 for a low spec one), can be upgraded to 2x 6core@3.46Ghz, 288GB ram and compared to many alternatives they’re pretty quiet. There’s no need to actually go with servers, but you’re going to want some kind of setup that has a minimum of 32GB ram.&lt;/p&gt;
+&lt;p&gt;The VMs discussed throughout this post are using ~23GB on my cluster, but in total I’m using 81GB after a year of experimentation, so if you can get a bit more it’ll leave you more room for further experimentation.&lt;/p&gt;
+&lt;h2&gt;Network setup (DMZ)&lt;/h2&gt;
+&lt;p&gt;Setup a separate network (DMZ) and start it off by not allowing anything other than outbound internet access (nothing inbound yet), pick a subnet (so you can specify rules specifically for them) and put your hosts in it. Make sure to also configure DNS in this step (so you don’t have to remember IPs for all your hosts and VMs).&lt;/p&gt;
+&lt;h2&gt;Optional: automate setting up a bare-metal Kubernetes cluster&lt;/h2&gt;
+&lt;p&gt;Using &lt;a href=&quot;https://github.com/coreos/matchbox&quot;&gt;Matchbox&lt;/a&gt; you can control PXE/ignition provisioning on physical(or virtual) hosts using terraform. I went with &lt;a href=&quot;https://github.com/poseidon/typhoon&quot;&gt;typhoon&lt;/a&gt; as a base to provision a Kubernetes cluster. I ended up scrapping it again, but I learned a lot about TFTP and PXE doing this.&lt;/p&gt;
+&lt;p&gt;The main reason for scrapping it was that it didn’t feel flexible enough, so I kept digging around a bit and found that VMWare vSphere can be controlled by terraform. So let’s give that a try.&lt;/p&gt;
+&lt;h2&gt;Setup ESXi on hosts&lt;/h2&gt;
+&lt;p&gt;Automating this using matchbox would be a good idea. I actually did it manually though (shame on me!), I’ll fix that at some point. It’s pretty straightforward, no different than installing any other OS, so get it done and give them DNS entries so you don’t have to remember them by IP.&lt;/p&gt;
+&lt;h2&gt;Provision Gitlab for source control&lt;/h2&gt;
+&lt;p&gt;Yes, you could just put this on Github, but that would be cheating ;). Start off by creating a VM, 2vCPU, 8GB RAM and 20GB HDD should be enough for quite a while (mine’s currently using 200Mhz, 1.5gGB RAM and 5GB HDD). Install &lt;a href=&quot;https://about.gitlab.com/install/&quot;&gt;Gitlab&lt;/a&gt; on it and give it a DNS entry. Use certbot with your challenge of choice (Cloudflare for example) for giving it a TLS certificate (it’s nice to have and it’s also going to be the easiest path for getting Gitlab Container Registry working later on). The harder path for getting Container registry working is also less secure.&lt;/p&gt;
+&lt;h2&gt;Provision Gitlab runner&lt;/h2&gt;
+&lt;p&gt;You’ll also want runners for running both infrastructure and application deployment pipelines. I went for a &lt;a href=&quot;https://docs.gitlab.com/runner/install/docker.html&quot;&gt;docker service&lt;/a&gt;, so that docker images can be used for steps. You might be tempted to use Kubernetes runners for application deployment pipelines, but you’ll need privileged containers to be able to run Docker in Docker steps, making it impossible to run them on a secure Kubernetes cluster.&lt;/p&gt;
+&lt;p&gt;Now you’ve got source control and a means to running pipelines when code is pushed, make sure to set up repositories and pipelines for upcoming steps.&lt;/p&gt;
+&lt;h2&gt;Provision Kubernetes cluster&lt;/h2&gt;
+&lt;p&gt;Remember to create a repository for this and hook up a pipeline. You should now automate provisioning your Kubernetes cluster. I went with &lt;a href=&quot;https://github.com/kubernetes-sigs/kubespray&quot;&gt;Kubespray&lt;/a&gt;, creating the VMs for hosts using the VMWare provider and having the ansible inventory files as terraform templates so that they can be generated and populated by terraform.&lt;/p&gt;
+&lt;p&gt;Important: make sure to create a multi-master cluster, switching from single to multi-master is a bit of a pain and with single-master you can’t do updates without downtime.&lt;/p&gt;
+&lt;p&gt;This isn’t as nice to work with as kops, but it works. Please let me know if you find something that works better, I’m not completely satisfied with this setup. There are plans to support vSphere in kops, so might be worth looking into that before diving too deep into this setup.&lt;/p&gt;
+&lt;h2&gt;Configure cluster&lt;/h2&gt;
+&lt;p&gt;Configure ingress controller, network policies, users/roles and namespaces using terraform and the kubernetes provider. It’s a bit of extra work compared to just working with yaml files, but the fact that items removed from source are also removed from the cluster makes it worth it.&lt;/p&gt;
+&lt;p&gt;I’ve run into a few issues with not all resources being supported by the provider, so I still have a few yaml files being applied as a step in the pipeline. But whatever you can convert to utilize the kubernetes provider will require less maintenance.&lt;/p&gt;
+&lt;h2&gt;Security checks for cluster&lt;/h2&gt;
+&lt;p&gt;First off you should run a &lt;a href=&quot;https://github.com/aquasecurity/kube-hunter&quot;&gt;kube-hunter&lt;/a&gt; scan to look for vulnerabilities, you should also do both master and worker node scans using &lt;a href=&quot;https://github.com/aquasecurity/kube-bench&quot;&gt;kube-bench&lt;/a&gt;, which compares your configuration with a CIS benchmark. These scans will raise awareness and will probably point out a few issues you’ll want to fix before exposing anything. The kubernetes ecosystem does not have a security-first mentality.&lt;/p&gt;
+&lt;h1&gt;Setting up the blog&lt;/h1&gt;
+&lt;p&gt;I skimped out a bit on the hard way here, I should obviously have built my own custom blogging platform for this post to be entirely valid. The main reason for doing so is that I’m currently more interested in the devops area, so I’m cutting corners a bit to spend my time on what I find interesting.&lt;/p&gt;
+&lt;h2&gt;Picking a blogging platform&lt;/h2&gt;
+&lt;p&gt;I’ve looked a bit at Ghost and I like the minimalism and focus of using markdown for posts, but I wanted to use a static site generator. Mostly for security reasons, I want this blog to be low maintenance and considering the amount of vulnerabilities that crop up for most blogging platforms and the fact that this would be one of the services exposed on my homelab I’d have to keep up with it. Performance is another reason, going static and having a build step run every time I change the content enables really aggressive caching and pre-gzipped files.&lt;/p&gt;
+&lt;p&gt;After some digging around I ended up picking Gatsby. Being based on React it feels pretty natural and simple, again picking a path based on what I want to spend my time on. Any changes I’d want to do would be fairly quick. It’s rather efficient out of the box and has most of the desired tooling in place. Yes, there’s plenty of room for optimization, this isn’t even remotely interactive enough to warrant the amount of javascript, but it’s ok for now according to lighthouse:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/initial-blog-lighthouse-audit-cb539c9f8c923c13f3aa5366f9dc8c6f.png&quot; alt=&quot;Lighthouse audit performance report showing 100/100 performance&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Further cutting corners I went with one of the available starters.&lt;/p&gt;
+&lt;h2&gt;Picking a starter&lt;/h2&gt;
+&lt;p&gt;I prefer working on javascript over doing design work, so I picked a starter based on what they looked like rather than paying too much attention to what features were included and ended up picking &lt;a href=&quot;https://github.com/scttcper/gatsby-casper&quot;&gt;gatsby-casper&lt;/a&gt;. It’s not too far off from the feature set I’d like either.&lt;/p&gt;
+&lt;p&gt;Create site:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;gatsby new site-name starter-url&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;cd site-name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;gatsby develop&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Modifications to starter&lt;/h2&gt;
+&lt;p&gt;I started off by adding build time gzipping, accomplished by adding &lt;a href=&quot;https://www.gatsbyjs.org/packages/gatsby-plugin-zopfli/&quot;&gt;gatsby-plugin-zopfli&lt;/a&gt;, saving the web server a bit of work and enables more CPU intensive compression as it doesn’t have to be as fast.&lt;/p&gt;
+&lt;p&gt;Next up was removing google analytics, regular logs and Cloudflare give me more than enough statistics, no need to empower Google further, doing so is also a tiny performance gain.&lt;/p&gt;
+&lt;p&gt;Tags were added to enable sorting through the different types of content I envision this blog ending up having. Again there was a plugin available to sort it out: &lt;a href=&quot;https://www.gatsbyjs.org/packages/gatsby-plugin-tags/&quot;&gt;gatsby-plugin-tags&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;After having run the Lighthouse audit I also fixed the PWA tests by configuring two additional plugins: &lt;a href=&quot;https://www.gatsbyjs.org/packages/gatsby-plugin-manifest/&quot;&gt;gatsby-plugin-manifest&lt;/a&gt; and &lt;a href=&quot;https://www.gatsbyjs.org/packages/gatsby-plugin-offline/&quot;&gt;gatsby-plugin-offline&lt;/a&gt;. However I removed them again because the serviceworker configuration was a bit too aggressive (downloaded all content right away). While this isn’t really a problem now, it could have been when there’s more content.&lt;/p&gt;
+&lt;p&gt;The starter had a subscription setup included, so I just registered for a Mailchimp account and hooked it up, noticed that they have an RSS to email feature, which hopefully can be used to automatically send emails for new posts, I’ll look into this before posting my second article if there are any subscribers.&lt;/p&gt;
+&lt;h3&gt;Disqus&lt;/h3&gt;
+&lt;p&gt;Setting up Disqus for comments was really easy, basically just including a react component with some configuration.&lt;/p&gt;
+&lt;p&gt;I ended up removing it again though after noticing that in Chrome it injects iframes for both Google and Facebook, which in turn does a bunch of tracking, both of which were disallowed by both frame-src and connect-src (were set to ‘self’ and disqus.com). Not sure what the CSP specification says about content inside an iframe, but I think Firefox handled it better as it loaded neither of the iframes, did no requests and only had the Disqus tracking.&lt;/p&gt;
+&lt;p&gt;Not acceptable, so no comments field for now. Going to see if I can find some other external service that does it better.&lt;/p&gt;
+&lt;h3&gt;Draft article issues&lt;/h3&gt;
+&lt;p&gt;There were also some issues with the draft setup, draft articles were included in the production build as reachable pages. They were filtered in the startpage listing, but not for previous/next alongside readnext.&lt;/p&gt;
+&lt;p&gt;Both issues can be fixed by editing gatsby-node a bit:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// Create post pages&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; posts &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; result&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;data&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;allMarkdownRemark&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;edges&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;post &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;process&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;env&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token constant&quot;&gt;NODE_ENV&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;production&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; edge&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;frontmatter&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;draft &lt;span class=&quot;token operator&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Replace &lt;code class=&quot;language-text&quot;&gt;result.data.allMarkdownRemark.edges&lt;/code&gt; with &lt;code class=&quot;language-text&quot;&gt;posts&lt;/code&gt; a bit further down to stop publishing tags with no corresponding published post aswell.&lt;/p&gt;
+&lt;h3&gt;Fix syntax highlighting&lt;/h3&gt;
+&lt;p&gt;Pick a theme and set it as an import in gatsby-browser.js&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;prismjs/themes/prism-okaidia.css&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Finally I cleaned up the example content and replaced a bunch of placeholder content.&lt;/p&gt;
+&lt;h1&gt;Setting up continuous delivery&lt;/h1&gt;
+&lt;h2&gt;Create CD pipeline&lt;/h2&gt;
+&lt;p&gt;I’ve got a CI image called shared-ci for reuse across projects, so I’m basing my pipeline off of that. But it’s actually based on Gitlabs autodevops configuration, so it might be a good idea to just make that work for you. The image is pretty much that setup modularized and customized a bit on an image.&lt;/p&gt;
+&lt;p&gt;First up is a build step for Gatsby:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;gatsby build&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Next up is creating a docker image with your application, one option is to just go with herokuish, another possibility is a custom image with your favorite webserver.&lt;/p&gt;
+&lt;p&gt;Finally for the actual deploy you should have a helm install (make sure you secure it, default tiller install is pretty insecure and will be used by an attacker to escalate to whatever role you gave that service account, first example being cluster-admin).&lt;/p&gt;
+&lt;p&gt;Try kubectl port-forward to make sure your service is working.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/blog-cd-pipeline-aebd4f6ee73b15eb85ee92c0834efaba.png&quot; alt=&quot;Blog continuous delivery pipeline&quot;&gt;&lt;/p&gt;
+&lt;h2&gt;Configure Gitlab Container Registry&lt;/h2&gt;
+&lt;p&gt;If you had or did a custom image for CI tools you’ll want the container registry to publish it on. Whichever way you went you’ll need an image registry for the application image your pipeline builds, so that it can be grabbed from there when deploying to Kubernetes. If all you need is a docker registry, it’s a pretty nice solution as it enables an image repository for every repository you’ve got.&lt;/p&gt;
+&lt;h2&gt;Provision public load balancer&lt;/h2&gt;
+&lt;p&gt;Get a load balancer running as an edge for your cluster, this will be the entrypoint, so spend a bit extra time hardening it. I set mine up so that I need to specify all the actual domains it should expose, no wildcard entries. Currently that means it’s going to drop anything other than requests to www.lind.sh.&lt;/p&gt;
+&lt;p&gt;Configure a letsencrypt certificate for the load balancer, along with cron job to auto renew it.&lt;/p&gt;
+&lt;p&gt;Once you’ve got this running you should test it out by setting up an internal DNS for the service you’re about to expose pointing to the load balancer.&lt;/p&gt;
+&lt;h2&gt;Cloudflare setup&lt;/h2&gt;
+&lt;p&gt;Configure your DNS so that you can control it from a Cloudflare account, take a look at the possible settings and configure to suit your site. Point your domain to your gateway and once you feel confident you’ve got everything right, punch a hole through your gateway by setting up port forwarding to your load balancer.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Who am I?]]></title><description><![CDATA[title: What is this?
+Who am I?
+What to expect from this blog Why am I doing this? I’ve thought about starting a mostly technical blog for…]]></description><link>https://lind.sh/who-am-i/</link><guid isPermaLink="false">https://lind.sh/who-am-i/</guid><pubDate>Wed, 30 Jan 2019 22:28:33 GMT</pubDate><content:encoded>&lt;p&gt;title: What is this?
+Who am I?
+What to expect from this blog&lt;/p&gt;
+&lt;h1&gt;Why am I doing this?&lt;/h1&gt;
+&lt;p&gt;I’ve thought about starting a mostly technical blog for quite a while and I’ve got some scrambled thoughts and notes for a couple of articles that I’d like to share. What tipped the scales over in favor of actually doing it is a combination of the amount of amassed potential material and the interest shown for what I’m doing both professionally and in my spare time. Quite a bit of it is for doing talks, but I’m not great at either speaking or writing and it seems reasonable to start that learning path in this end.&lt;/p&gt;
+&lt;!-- # Outline
+- why am I doing this?
+- getting a personal blog the easy way (if you just want a blog and why you shouldn&apos;t go this route)
+- overdoing infrastructure (buying servers, automating it, previous tries)
+- picking a blogging platform
+- picking a starter
+- important? changes made to starter
+- setting up continuous delivery
+
+# Other post?
+- who am I? (move to about page?)
+- what to expect from this blog
+
+
+ # What to expect from this blog
+ //TODO: remove this?
+ I&apos;ve got a job, a wife, 2 daughters and a third kid on the way, I&apos;ve got lots of stuff I want to experiment with and a house with lots of renovation work, so jamming this in there is not a cakewalk.
+
+ I do however want to make time for this and I&apos;ve got some ideas and notes for things I want to write about:
+ - a shared-ci solution I created between projects at my company
+ - considerations and conclusions for the homelab setup
+ - bare-metal provisioning with terraform and matchbox
+ - VMWare and automating it with terraform
+ - Kubernetes, terraform and kubespray
+ - a test setup that gave almost the same value as a Selenium E2E suite, but was fast enough to run on save.
+ - some sort of devops 101
+
+ Future posts will be about things that I experiment with or interesting stuff that I do at work. I&apos;ve also gotten some requests for writing a bit about and showing some pictures of the renovation work. Likely there will also be some posts about DIY projects. Both the rack cabinet and speakers are hopefully something I&apos;ll be proud of. The rack cabinet looks nice in sketchup atleast. The plan is for this to be a technical blog.
+
+ # Who am I?
+ My name is Kristoffer Lind, I&apos;m 35 years old and I work as an IT consultant at the Lund branch of [tretton37](https://tretton37.com), where I&apos;ve had client projects ranging from prototyping web apps to building enterprise software to specifically operations development assignments. I&apos;ve been working mostly as a full-stack javascript specialist, but I&apos;ve pretty recently switched department and role within the company to focus more on operations development.
+
+ Before that I spent a couple of years in the family business as a stonemason working with marble and granite, going even further back I was a sergeant and systems technician for communication systems in the military. Other interests include snowboarding, inline skating and music/sound systems. But there likely won&apos;t be any post about either of those (or anything about past occupations either for that matter).
+
+ I&apos;m no good at either presenting or writing, but I&apos;d like to improve, so here I go starting off upping my writing skills, constructive criticism welcome. Haven&apos;t added support for comments yet, but you can find me on Github: [kristofferlind](https://github.com/kristofferlind) for now. --&gt;</content:encoded></item></channel></rss>
