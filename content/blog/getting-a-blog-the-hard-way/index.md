@@ -7,8 +7,6 @@ categories:
 tags:
 - terraform
 - kubernetes
-- gatsby
-- vmware
 - baremetal
 date: "2019-03-10"
 draft: false
