@@ -1,5 +1,4 @@
 ---
-# layout: post
 title: "Getting a blog the hard way"
 categories:
 - Operations Development
@@ -9,7 +8,6 @@ tags:
 - kubernetes
 - baremetal
 date: "2019-03-10"
-draft: false
 ---
 
 The hard way is a path focused on learning, you should follow/replicate this if your aim is gaining knowledge. This post will serve as an overview, while going into a bit more details for sections where there's no separate post planned. Expect a lot of deep dives searching, especially if you do it before the detailed posts are available.
