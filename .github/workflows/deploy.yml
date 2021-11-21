@@ -35,3 +35,5 @@ jobs:
 
     - name: Deploy
       run: ./themes/tale-hugo/scripts/deploy.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
