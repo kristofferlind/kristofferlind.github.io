@@ -1,0 +1,10 @@
+baseURL = 'https://www.lind.sh/'
+languageCode = 'en-us'
+title = 'Kristoffer Lind - Developer, Technologist, Blogger'
+
+# Theme settings
+theme = "tale-hugo"
+[params]
+  Author = "Kristoffer Lind"
+  Description = 'Kristoffer Lind is a software engineer and site reliability engineer with a broad technical interest.'
+  EnablePreviewFeatures = false
