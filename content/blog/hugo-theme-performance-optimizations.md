@@ -104,7 +104,7 @@ This is pretty straightforward, start timeout for executing the action on mousee
 
 ```js
 function onClickIntent(element, hoverTime, callback) {
-  let isCancelled, timer;
+  let timer;
 
   function disable() {
     element.removeEventListener('mouseenter', start);
@@ -112,10 +112,8 @@ function onClickIntent(element, hoverTime, callback) {
   }
 
   function fire() {
-    if (!isCancelled) {
-      callback(element);
-      disable();
-    }
+    callback(element);
+    disable();
   }
 
   function cancel() {
@@ -124,7 +122,6 @@ function onClickIntent(element, hoverTime, callback) {
   }
 
   function start() {
-    isCancelled = false;
     timer = setTimeout(fire, hoverTime);
   }
 
@@ -171,7 +168,7 @@ For the prerender hint, replace the rel attribute on the existing hint.
 
 ```js
 function onClickIntent(element, hoverTime, callback) {
-  let isCancelled, timer;
+  let timer;
 
   function disable() {
     element.removeEventListener('mouseenter', start);
@@ -179,10 +176,8 @@ function onClickIntent(element, hoverTime, callback) {
   }
 
   function fire() {
-    if (!isCancelled) {
-      callback(element);
-      disable();
-    }
+    callback(element);
+    disable();
   }
 
   function cancel() {
@@ -191,7 +186,6 @@ function onClickIntent(element, hoverTime, callback) {
   }
 
   function start() {
-    isCancelled = false;
     timer = setTimeout(fire, hoverTime);
   }
 
@@ -256,4 +250,4 @@ Be mindful of your dependencies.
 ### History
 In 2016 there was a minor crisis because leftpad (padding left side of strings) was taken off of the package registry. Prime example of a library nobody should've installed, not because of the crisis, but because of the problem it solved. But it had millions of downloads and broke thousands of projects.
 
-In 2021 we had ua-parser-js, which if you actually need much of the information it figures out is something that would actually save you countless hours. I don't like the fact that people do, but I get why it exists. Malicious versions of it were published to the npm registry and stole keys, cookies and passwords from anyone who installed it. We often have code review processes in place for any changes done by collegues. But we blindly trust random people on the internet because it's in a package? I think we "choose" not to because it's overwhelming.
+In 2021 we had ua-parser-js, which if you actually need much of the information it figures out is something that would actually save you countless hours. I don't like the fact that people do, but I get why it exists. Malicious versions of it were published to the npm registry and stole keys, cookies and passwords from anyone who installed it. We often have code review processes in place for any changes done by colleagues. But we blindly trust random people on the internet because it's in a package? I think we "choose" to trust them because it's overwhelming.
