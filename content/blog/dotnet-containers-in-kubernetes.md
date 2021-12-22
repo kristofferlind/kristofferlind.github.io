@@ -8,7 +8,6 @@ categories:
 tags:
 - dotnet
 - docker
-- kubernetes
 - security
 - performance
 date: "2021-12-04"
@@ -37,4 +36,4 @@ If you're doing any graphics work (generating excel files for example) and depen
 ## Docker configuration
 Unless you set a user that application of yours is going to be running as root user. Again, this is very common in the docker ecosystem. The user isn't changed because you might want to install something more. I'd prefer a security first approach where you'd need to switch back to root user for those installs, which would also make it very visible that the root user is active.
 
-Containers aren't magic, you should treat them sort of like any other server OS. That user running the application shouldn't be allowed to do a single thing more than it needs to. It should only have applications required for running the application installed. They do however have the benefit that it's really easy to argue for them being immutable. No snowflake pet servers, thank you very much.
+Containers aren't magic, you should treat them sort of like any other server OS. That user running the application shouldn't be allowed to do a single thing more than it needs to. It should only have software required for running the application installed. They do however have the benefit that it's really easy to argue for them being immutable. No snowflake pet servers, thank you very much.
