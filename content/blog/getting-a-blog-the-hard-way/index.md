@@ -7,6 +7,8 @@ tags:
 - terraform
 - kubernetes
 - baremetal
+aliases:
+- /getting-a-blog-the-hard-way
 date: "2019-03-10"
 ---
 
