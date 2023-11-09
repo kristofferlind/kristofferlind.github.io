@@ -8,3 +8,9 @@ theme = "tale-hugo"
   Author = "Kristoffer Lind"
   Description = 'Kristoffer Lind is a software engineer and site reliability engineer with a broad technical interest.'
   EnablePreviewFeatures = false
+
+# Markup rendering options, allow inline html
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
