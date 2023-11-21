@@ -1,0 +1,375 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Security automation &#183; Kristoffer Lind - Developer, Technologist, Blogger</title>
+<meta name=description content="Security automation overview, automating dependency scanning, container scanning, source code scanning, IDE based checks and penetration testing.">
+<link rel=canonical href=/blog/security-automation/>
+<style>*{line-height:1.5}html,body{color:#555;background-color:#fff;margin:0;padding:0}html{font-family:times new roman,Times,serif;font-size:14px;overflow-y:scroll}@media(min-width:600px){html{font-size:18px}}h1,h2,h3,h4,h5,h6,.heading{color:#353535;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;line-height:normal}a{color:#4a9ae1;text-decoration:none}blockquote{border-left:.25rem solid #e5e5e5;color:#979797;margin:.8rem 0;padding:.5rem 1rem}blockquote p:last-child{margin-bottom:0}@media(min-width:600px){blockquote{padding:0 5rem 0 1.25rem}}img{display:block;margin:0 0 1rem;max-width:100%;object-fit:scale-down}td{vertical-align:top}@media(prefers-color-scheme:dark){html,body{background-color:#333;color:#ddd}h1,h2,h3,h4,h5,h6,.heading{color:#ccc}blockquote{color:#979797}}.highlight pre{padding:1rem;border-radius:3px;overflow-x:auto;font-size:.8rem}.post{padding:3rem 0}.post-info{color:#aaa;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;letter-spacing:.5px;text-align:center}.post-info span{font-style:italic}.post-title{color:#353535;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:2rem;margin:1rem 0;text-align:center}@media(min-width:600px){.post-title{font-size:3rem}}.post-line{border-top:.4rem solid #353535;display:block;margin:0 auto 3rem;width:4rem}.post p{margin:0 0 1rem;text-align:justify}.post a:hover{text-decoration:underline}.post img{margin:0 auto .5rem}.post img+em{color:#aaa;display:block;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:.9rem;font-style:normal;text-align:center}@media(prefers-color-scheme:dark){.post-info{color:#ccc}.post-title{color:#eee}.post img+em{color:#ccc}}.container{margin:0 auto;max-width:800px;width:80%}main,footer,.nav-container{display:block;margin:0 auto;max-width:800px;width:80%}.nav{box-shadow:0 2px 2px -2px rgba(0,0,0,.2);overflow:auto}.nav-container{margin:1rem auto;position:relative;text-align:center}.nav-title{color:#555;display:inline-block;margin:0;padding-right:.2rem}.nav-title:hover,.nav-title:focus{opacity:.6}.nav ul{list-style-type:none;margin:1rem 0 0;padding:0;text-align:center}.nav li{color:#555;display:inline-block;opacity:.6;padding:0 2rem 0 0}.nav li:last-child{padding-right:0}.nav li:hover,.nav li:focus{opacity:1}.nav a{color:#555;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif}@media(min-width:600px){.nav-container{text-align:left}.nav ul{bottom:0;position:absolute;right:0}}footer{font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;padding:2rem 0;text-align:center}footer span{color:#555;font-size:.8rem}@media(prefers-color-scheme:dark){.nav{box-shadow:0 2px 2px -2px rgba(255,255,255,.2)}.nav-title{color:#ddd}.nav li{color:#ddd}.nav a{color:#ddd}footer span{color:#ddd}}.pagination{border-top:.5px solid #e5e5e5;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;padding-top:2rem;position:relative;text-align:center}.pagination span{color:#353535;font-size:1.1rem}.pagination .top{color:#555;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:1.1rem;opacity:.6}.pagination .top:hover{opacity:1}.pagination .arrow{color:#555;position:absolute}.pagination .arrow:hover,.pagination .arrow:focus{opacity:.6;text-decoration:none}.pagination .left{left:0}.pagination .right{right:0}@media(prefers-color-scheme:dark){.pagination span{color:#ccc}.pagination .top{color:#ddd}.pagination .arrow{color:#ddd}}.catalogue-item{border-bottom:1px solid #e5e5e5;display:block;padding:2rem 0}.catalogue-item:hover .catalogue-line,.catalogue-item:focus .catalogue-line{width:5rem}.catalogue-item:last-child{border:0}.catalogue-item a.entry{color:#555}.catalogue-time{color:#aaa;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;letter-spacing:.5px}.catalogue-title{color:#353535;display:block;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:1.6rem;font-weight:700;margin:.5rem 0}@media(min-width:600px){.catalogue-title{font-size:1.8rem}}.catalogue-line{border-top:.2rem solid #353535;display:block;width:2rem}.catalogue p{margin-bottom:.25rem}.catalogue .tags{display:flex;justify-content:flex-end}.catalogue.archive{margin-bottom:.25rem}.catalogue.archive article{box-sizing:border-box;display:flex;justify-content:space-between}@media(prefers-color-scheme:dark){.catalogue-item a.entry{color:#eee}.catalogue-title{color:#ddd}}</style>
+<link rel=icon type=image/png sizes=32x32 href=/images/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/images/favicon-16x16.png>
+<link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png>
+<link href rel=alternate type=application/rss+xml title="Kristoffer Lind - Developer, Technologist, Blogger">
+<script async type=text/javascript src=https://www.lind.sh/js/index.79b056912be7157f2501588e9a504af685b2c5e0f50a84a4699aedebeec5a92b27ceccb62d381eaa7f263026fa2836d5628e85f5478b70da6a9c7f2648c5344d.js integrity="sha512-ebBWkSvnFX8lAViOmlBK9oWyxeD1CoSkaZrt6+7FqSsnzsy2LTgeqn8mMCb6KDbVYo6F9UeLcNpqnH8mSMU0TQ=="></script>
+</head>
+<body>
+<nav class=nav>
+<div class=nav-container>
+<a href=/>
+<h2 class=nav-title>Kristoffer Lind</h2>
+</a>
+<ul>
+<li>
+<a href=/about/>
+<span>Who am I?</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<main>
+<div class=post>
+<div class=post-info>
+<span>Written by</span>
+Kristoffer Lind
+<br>
+<span>on&nbsp;</span><time datetime="December 23, 2021">December 23, 2021</time>
+</div>
+<h1 class=post-title>Security automation</h1>
+<div class=post-line></div>
+<p>A typical web application involves a lot of code in many layers and manually keeping it secure requires in depth knowledge in all of those layers and lots of maintenance. To increase your chances of keeping it secure you could utilize automation. There are a lot of tools available for helping with security automation and it&rsquo;s a pretty big task to sift through them to find good ones. There are lots and lots of companies selling security tools who wants you on their hook. Incentive is therefore an important aspect in picking.</p>
+<p>This post will try to guide you through which tools are currently available, how to use the ones I picked along with some advice on processes and related issues. The following types of scanning will be discussed:</p>
+<ul>
+<li>application dependency scanning</li>
+<li>source code scanning</li>
+<li>IDE based checks</li>
+<li>docker container scanning</li>
+<li>automated penetration testing</li>
+<li>infrastructure as code scanning</li>
+</ul>
+<p>We&rsquo;ll start off looking at a setup that uses only cli based checks in your existing CI/CD pipelines and forces action by breaking builds. These checks provide a lot of value for the effort but requires a pretty high signal to noise ratio to avoid causing too much frustration. To keep that up it needs to be easy to suppress warnings and it needs to skip rules or parts with a high rate of false positives.</p>
+<p>In an upcoming post we&rsquo;ll look at a monitoring approach that will include running services and databases to allow keeping track of issues across projects. If you have the needs/resources to keep track of those dashboards and drive engagements it might be better to start there.</p>
+<p>Taking a hybrid approach isn&rsquo;t a bad idea if you want monitoring. Enforce some actions using this approach and keep track of all the issues using monitoring. Findings from monitoring can be used to tune enforcement and drive engagements.</p>
+<h1 id=dependency-scanning>
+<a href=#dependency-scanning class=heading>Dependency scanning</a>
+</h1>
+<p><a href=https://owasp.org/www-project-dependency-check/ rel=noopener>OWASP dependency-check</a> is a wrapper around most language/platform specific dependency scanners. If you want more control over how the scanning works it&rsquo;s easier to just configure the underlying analyzers. It&rsquo;s a great starting point and you can disable analyzers and set them up individually as needed.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#!/bin/bash
+</span><span style=color:#75715e></span>
+set -eu
+
+VERSION<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;latest&#34;</span>
+PROJECT_NAME<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;my-project&#34;</span>
+DATA_DIRECTORY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/cache/dependency-check&#34;</span>
+REPORTS_DIRECTORY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span><span style=color:#e6db74>/reports&#34;</span>
+SCAN_DIRECTORY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span><span style=color:#e6db74>&#34;</span>
+CVSS_THRESHOLD<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;5&#34;</span>
+
+<span style=color:#66d9ef>if</span> <span style=color:#f92672>[</span> ! -d <span style=color:#e6db74>&#34;</span>$DATA_DIRECTORY<span style=color:#e6db74>/cache&#34;</span> <span style=color:#f92672>]</span>; <span style=color:#66d9ef>then</span>
+  echo <span style=color:#e6db74>&#34;Creating data directory: </span>$DATA_DIRECTORY<span style=color:#e6db74>/cache&#34;</span>
+  mkdir -p <span style=color:#e6db74>&#34;</span>$DATA_DIRECTORY<span style=color:#e6db74>/cache&#34;</span>
+<span style=color:#66d9ef>fi</span>
+
+<span style=color:#66d9ef>if</span> <span style=color:#f92672>[</span> ! -d <span style=color:#e6db74>&#34;</span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span> <span style=color:#f92672>]</span>; <span style=color:#66d9ef>then</span>
+  echo <span style=color:#e6db74>&#34;Creating reports directory: </span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span>
+  mkdir -p <span style=color:#e6db74>&#34;</span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span>
+<span style=color:#66d9ef>fi</span>
+
+<span style=color:#66d9ef>if</span> <span style=color:#f92672>[</span> ! -f <span style=color:#e6db74>&#34;</span>$SCAN_DIRECTORY<span style=color:#e6db74>/dependency-check-whitelist.xml&#34;</span> <span style=color:#f92672>]</span>; <span style=color:#66d9ef>then</span>
+  echo <span style=color:#e6db74>&#34;Create empty whitelist&#34;</span>
+  cat &gt;<span style=color:#e6db74>&#34;</span>$SCAN_DIRECTORY<span style=color:#e6db74>/dependency-check-whitelist.xml&#34;</span> <span style=color:#e6db74>&lt;&lt;-DC_WHITELIST
+</span><span style=color:#e6db74>    &lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+</span><span style=color:#e6db74>    &lt;suppressions
+</span><span style=color:#e6db74>      xmlns=&#34;https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd&#34;
+</span><span style=color:#e6db74>    &gt;
+</span><span style=color:#e6db74>    &lt;/suppressions&gt;
+</span><span style=color:#e6db74>  DC_WHITELIST</span>
+<span style=color:#66d9ef>fi</span>
+
+echo <span style=color:#e6db74>&#34;Ensure we have the latest version of dependency check&#34;</span>
+docker pull owasp/dependency-check:$VERSION
+
+docker run --rm <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -e user<span style=color:#f92672>=</span>$USER <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -u <span style=color:#66d9ef>$(</span>id -u <span style=color:#e6db74>${</span>USER<span style=color:#e6db74>}</span><span style=color:#66d9ef>)</span>:<span style=color:#66d9ef>$(</span>id -g <span style=color:#e6db74>${</span>USER<span style=color:#e6db74>}</span><span style=color:#66d9ef>)</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --volume <span style=color:#e6db74>&#34;</span>$SCAN_DIRECTORY<span style=color:#e6db74>&#34;</span>:/src <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --volume <span style=color:#e6db74>&#34;</span>$DATA_DIRECTORY<span style=color:#e6db74>&#34;</span>:/usr/share/dependency-check/data <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --volume <span style=color:#e6db74>&#34;</span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span>:/report <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  owasp/dependency-check:$VERSION <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --scan /src <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --format <span style=color:#e6db74>&#34;ALL&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --failOnCVSS <span style=color:#e6db74>&#34;</span>$CVSS_THRESHOLD<span style=color:#e6db74>&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --project <span style=color:#e6db74>&#34;</span>$PROJECT_NAME<span style=color:#e6db74>&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --out /report <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --suppression <span style=color:#e6db74>&#34;/src/dependency-check-whitelist.xml&#34;</span>
+</code></pre></div><h2 id=nodejs>
+<a href=#nodejs class=heading>NodeJS</a>
+</h2>
+<p>Most NodeJS projects have thousands of dependencies, often most of what&rsquo;s considered the development environment for other languages is part of this installation. The result of this is that scanning will be very noisy, producing a massive amount of false positives, often for dependencies that are only used during development, but would be a problem if actually deployed.</p>
+<p>Create-react-app is a very popular approach for starting react projects and a freshly created project using that will currently result in about 1700 dependencies. While that sounds crazy, consider that it includes a lot of what dotnet developers are getting in their 20+ GB visual studio installation. Some if it is down to philosophies like DRA (don&rsquo;t repeat anyone), really small packages, download padding and deep nesting. But let&rsquo;s pop back out of that rabbit hole.</p>
+<p>If you have projects that look like that, you can try this approach. Development dependencies should be code utilized only during development, that is not included in the built bundle. Therefore you probably only care about vulnerabilities designed to attack development machines and build agents during installation or build phases among those dependencies. Those vulnerabilities are likely to be listed as critical, ignoring the rest will keep noise at a minimum.</p>
+<p>Also, noting that this is a thing should make you consider doing those installations a lot more isolated from now on. Anyways, we can therefore split the check like this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>echo <span style=color:#e6db74>&#34;Checking dependencies for moderate or worse vulnerabilities&#34;</span>
+npm audit --only<span style=color:#f92672>=</span>prod --audit-level<span style=color:#f92672>=</span>moderate
+
+echo <span style=color:#e6db74>&#34;Checking devDependencies for critical vulnerabilities&#34;</span>
+npm audit --only<span style=color:#f92672>=</span>dev --audit-level<span style=color:#f92672>=</span>critical
+</code></pre></div><p>That works if you can enforce fixing vulnerabilities or moving them to development dependencies if that&rsquo;s where they belong. You do however likely want to be able to whitelist vulnerabilities that don&rsquo;t affect you, which is sadly not supported by <code>npm audit</code> (has been requested for years). I&rsquo;ve used <a href=https://www.npmjs.com/package/audit-ci rel=noopener>audit-ci</a> as an alternative, but check if it&rsquo;s supported by npm audit yet or consider alternatives. Doing it based on json output from npm audit is also an alternative.</p>
+<p>Configuration file example for audit-ci</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js>{
+  <span style=color:#e6db74>&#34;allowlist&#34;</span><span style=color:#f92672>:</span> [
+    <span style=color:#ae81ff>1</span>,
+    <span style=color:#ae81ff>2</span>
+  ]
+}
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>echo <span style=color:#e6db74>&#34;Checking dependencies for moderate or worse vulnerabilities&#34;</span>
+npx audit-ci --moderate --skip-dev --config audit-ci.production.json
+
+echo <span style=color:#e6db74>&#34;Checking devDependencies for critical vulnerabilities&#34;</span>
+npx audit-ci --critical --config audit-ci.development.json
+</code></pre></div><p>Note that it includes an example of using different configuration files for development and production dependencies. You can&rsquo;t put comments along with the whitelist to explain why they were put there and the ids in the allow list are not the searchable advisories. Those are the main reasons I&rsquo;m not too fond of it. I&rsquo;d also suggest doing an <code>npm audit</code> separately in there just for the output (might be a personal thing, but I find that report easier to sift through).</p>
+<p>You could also choose to rely on antivirus and developers keeping their eyes open when doing installs for the development dependencies and just skip them. In that case you can stick with just dependency check by adding the `&ndash;nodePackageSkipDevDependencies" argument to dependency-check.</p>
+<p>There is a bit of risk involved with not fully scanning development dependencies though. It&rsquo;s not unheard of for the sorting to be incorrect for example (it&rsquo;s hard to keep track of). But the workarounds that will happen as a result of the frustration will be worse.</p>
+<h1 id=code-scanning>
+<a href=#code-scanning class=heading>Code scanning</a>
+</h1>
+<p>These tools definitely will not find everything, but they&rsquo;re constantly improving and some help is better than none. Sadly I couldn&rsquo;t find any wrapper tool like the one for scanning dependencies, but <a href=https://semgrep.dev rel=noopener>semgrep</a> is a pretty generic tool that even has it&rsquo;s own rules registry. I&rsquo;d prefer recommending something without commercial intentions, but as long as you avoid spending too much effort on custom rules you can just switch if it gets too bad. Link all invocations to a script like the one below and it should be easily replaceable.</p>
+<p>OWASP maintains a list of <a href=https://owasp.org/www-community/Source_Code_Analysis_Tools rel=noopener>source code analysis tools</a>, I&rsquo;d suggest looking there for alternatives.</p>
+<p>Semgrep has two recommended starting sets of rules, one intended for full automation that only contains high confidence rules and another one intended to be used for manual review. Put the first one in CI checks that trigger per commit and the other one in a pipeline that runs on a schedule. Don&rsquo;t forget to also set aside some time to look at the reports of those scheduled runs. You could start off by triggering it once per month and booking a calendar slot for looking at it later that day.</p>
+<p>CI check:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=color:#75715e>#!/bin/bash
+</span><span style=color:#75715e></span>
+VERSION<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;latest&#34;</span>
+SCAN_DIRECTORY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span><span style=color:#e6db74>&#34;</span>
+
+echo <span style=color:#e6db74>&#34;Ensure we have the latest version of semgrep&#34;</span>
+docker pull returntocorp/semgrep:$VERSION
+
+echo <span style=color:#e6db74>&#34;Scan code in </span>$SCAN_DIRECTORY<span style=color:#e6db74> using semgrep&#34;</span>
+docker run <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -v <span style=color:#e6db74>&#34;</span>$SCAN_DIRECTORY<span style=color:#e6db74>&#34;</span>:/src <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --workdir /src <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  returntocorp/semgrep:$VERSION <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --metrics off <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --strict <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --config<span style=color:#f92672>=</span>p/r2c-ci
+</code></pre></div><p>You can explore the semgrep registry <a href=https://semgrep.dev/explore rel=noopener>here</a>, notice how <code>--config=p/r2c-ci</code> matches the name of the recommended getting started set r2c-ci. The only difference in that script for running the noisy ruleset is switching r2c-ci to r2c-security-audit. You can also pick multiple rulesets by having multiple <code>--config</code> arguments.</p>
+<p>They also have an alternate version that supports scanning only the diff against master/main/trunk branch, but it has a proprietary license, look <a href=https://github.com/returntocorp/semgrep-action rel=noopener>here</a> for more details.</p>
+<p>I&rsquo;d suggest also configuring linter based security tools for your main languages. Those issues can then be addressed while writing code, making the feedback loop a lot shorter.</p>
+<h2 id=nodejs-1>
+<a href=#nodejs-1 class=heading>NodeJS</a>
+</h2>
+<p>You could scan NodeJS specifically using njsscan, based on a quick check though the same rules are available in semgrep registry and the tool is basically a prepackaged way of running semgrep configured to scan NodeJS projects. I&rsquo;d suggest just configuring the rules you care about in semgrep, that way you can run the same scan for all your projects (unless all your projects are NodeJS based, in which case this solution might be easier).</p>
+<h2 id=dotnet>
+<a href=#dotnet class=heading>Dotnet</a>
+</h2>
+<p>Support for dotnet projects is pretty new in semgrep currently, which means there are very few rules in the registry. Unless there are now more available rules for dotnet in semgrep, I&rsquo;d recommend <a href=https://security-code-scan.github.io/ rel=noopener>Security Code Scan</a> for scanning dotnet projects. Actually since it can also be shown as part of intellisense I&rsquo;d recommend adding it anyway.</p>
+<p>There are three different ways it can be used:</p>
+<ul>
+<li>standalone</li>
+<li>visual studio extension</li>
+<li>nuget package</li>
+</ul>
+<p>Including it as a nuget package sets it up as both a development tool (intellisense) and build time check, so that&rsquo;s probably the best choice. It can be installed for a project like this: <code>Install-Package SecurityCodeScan</code>.</p>
+<p>It does require quite a bit of effort to set it up for each project so if you have a lot of projects you can run it standalone like this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>dotnet tool install --global security-scan
+security-scan /path/to/solution.sln
+</code></pre></div><p>During build issues will show up as build warnings, so you&rsquo;ll need to run the build with warnings as errors to fail builds. Warnings can be <a href="https://docs.microsoft.com/en-us/visualstudio/code-quality/in-source-suppression-overview?view=vs-2022" rel=noopener>suppressed</a> like any other build warnings. If the project has many other warnings it can be tedious to work through them, but it&rsquo;s probably a good idea to look at them.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>dotnet build -warnasserror some/project.csproj
+</code></pre></div><h2 id=other-code-scanning-tools>
+<a href=#other-code-scanning-tools class=heading>Other code scanning tools</a>
+</h2>
+<ul>
+<li><a href=https://github.com/zricethezav/gitleaks rel=noopener>GitLeaks</a> Prevent git leaks</li>
+<li><a href=https://rubygems.org/gems/license_finder rel=noopener>license_finder</a> Enforce license requirements</li>
+<li><a href=https://github.com/securego/gosec rel=noopener>GoSec</a> Golang</li>
+<li><a href=https://brakemanscanner.org/ rel=noopener>brakeman</a> Ruby on Rails</li>
+<li><a href=https://github.com/MobSF/Mobile-Security-Framework-MobSF rel=noopener>MobSF</a> Android/iOS</li>
+<li><a href=https://dwheeler.com/flawfinder/ rel=noopener>flawfinder</a> C/C++</li>
+<li><a href=https://github.com/nccgroup/sobelow rel=noopener>sobelow</a> Phoenix</li>
+</ul>
+<h1 id=ide-based-checks>
+<a href=#ide-based-checks class=heading>IDE based checks</a>
+</h1>
+<p>Linter based security checks can be triggered while writing or on save, which results in a very short feedback loop. These are hopefully going to be fixed before even ending up in a commit. Set these up as a recommended development tool, configured as part of the project if possible and include a check for them during build in your CI server.</p>
+<p>Linting is also a very good way to document and enforce code style conventions, so that you can stop worrying about those parts in code reviews, hopefully leading to higher quality reviews.</p>
+<h2 id=nodejs-2>
+<a href=#nodejs-2 class=heading>NodeJS</a>
+</h2>
+<p>ESLint is so popular I&rsquo;m going to assume it&rsquo;s already installed, if for some reason it isn&rsquo;t, it&rsquo;s fairly simple and you could start off with only these rules. Add <a href=https://github.com/nodesecurity/eslint-plugin-security rel=noopener>eslint-security-plugin</a> like this:</p>
+<p>Add dependency: <code>npm install --save-dev eslint-security-plugin</code><br>
+Configure (add to .eslintrc):</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#e6db74>&#34;plugins&#34;</span><span style=color:#f92672>:</span> [
+  <span style=color:#e6db74>&#34;security&#34;</span>
+],
+<span style=color:#e6db74>&#34;extends&#34;</span><span style=color:#f92672>:</span> [
+  <span style=color:#e6db74>&#34;plugin:security/recommended&#34;</span>
+]
+</code></pre></div><p>There are plenty of other very specific ESLint plugins that include security checks, but they&rsquo;re likely already included in the recommended configuration for that specific framework/library. If it&rsquo;s not already configured, see if you can find one for the framework used in that project.</p>
+<p>Also make sure it&rsquo;s done as part of the build.<br>
+In package.json:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;scripts&#34;</span>: {
+    <span style=color:#f92672>&#34;lint&#34;</span>: <span style=color:#e6db74>&#34;eslint src&#34;</span>
+  }
+}
+</code></pre></div><p>Then make sure <code>npm run lint</code> happens at some point during build, it will allow warnings by default, so that you can have really picky stuff or new rules as warnings and enforced rules as errors.</p>
+<h2 id=dotnet-1>
+<a href=#dotnet-1 class=heading>Dotnet</a>
+</h2>
+<p>Install nuget package version of Security Code scan as described above.</p>
+<h2 id=python>
+<a href=#python class=heading>Python</a>
+</h2>
+<p>I&rsquo;ve never done any python development, so I&rsquo;m not clear on what&rsquo;s best practice, but <a href=https://github.com/PyCQA/bandit rel=noopener>bandit</a> looks like a really nice tool. You can install it with: <code>pip install bandit</code> and then activate it in vscode by installing the python extension (ms-python.python) and adding the following configuration in .vscode/settings.json:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+    <span style=color:#f92672>&#34;python.linting.banditEnabled&#34;</span>: <span style=color:#66d9ef>true</span>,
+    <span style=color:#f92672>&#34;python.linting.enabled&#34;</span>: <span style=color:#66d9ef>true</span>
+}
+</code></pre></div><p>You can add it as a CI check like this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>pip install bandit
+bandit -r path/to/code
+</code></pre></div><h2 id=other-lintide-based-tools>
+<a href=#other-lintide-based-tools class=heading>Other lint/IDE based tools</a>
+</h2>
+<ul>
+<li><a href=https://spotbugs.github.io/ rel=noopener>spotbugs</a>+<a href=https://find-sec-bugs.github.io/ rel=noopener>find-sec-bugs</a> Java security checks</li>
+<li><a href=https://github.com/squizlabs/PHP_CodeSniffer rel=noopener>PHP CodeSniffer</a>+<a href=https://github.com/FloeDesignTechnologies/phpcs-security-audit rel=noopener>phpcs-security-audit</a> PHP security checks</li>
+</ul>
+<h1 id=container-scanning>
+<a href=#container-scanning class=heading>Container scanning</a>
+</h1>
+<p>Most docker images are full of known vulnerabilities even when fresh, with new ones being added daily. If you&rsquo;ve gone for default images (usually debian based), this scan is going to find so many vulnerabilities that it&rsquo;s frustrating to keep track of. Switch to images that have less stuff you&rsquo;re not using anyway included. Most of the time there&rsquo;s an alpine version available, which has way less vulnerabilities to keep track of as there&rsquo;s just less stuff included.</p>
+<p><a href=https://github.com/aquasecurity/trivy rel=noopener>Trivy</a> can be used to scan docker images and Dockerfiles. Image scanning supports both giving it an image name and filesystem scan.
+Your hardening process might prevent image scan from working on the final image, for example if you&rsquo;re removing the package manager. If that&rsquo;s the case you can utilize the filesystem scan to do it a bit earlier in the process when it still works.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># !/bin/bash</span>
+
+IMAGE<span style=color:#f92672>=</span>$1
+
+TRIVY_VERSION<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;0.21.2&#34;</span>
+
+<span style=color:#66d9ef>if</span> ! hash trivy 2&gt;/dev/null <span style=color:#f92672>||</span> ! trivy --version | grep -q <span style=color:#e6db74>&#34;</span>$TRIVY_VERSION<span style=color:#e6db74>&#34;</span>; <span style=color:#66d9ef>then</span>
+  echo <span style=color:#e6db74>&#34;Install image scanning tool&#34;</span>
+  wget https://github.com/aquasecurity/trivy/releases/download/v<span style=color:#e6db74>${</span>TRIVY_VERSION<span style=color:#e6db74>}</span>/trivy_<span style=color:#e6db74>${</span>TRIVY_VERSION<span style=color:#e6db74>}</span>_Linux-64bit.tar.gz
+  tar -C ~/bin -zxvf trivy_<span style=color:#e6db74>${</span>TRIVY_VERSION<span style=color:#e6db74>}</span>_Linux-64bit.tar.gz
+  rm trivy_<span style=color:#e6db74>${</span>TRIVY_VERSION<span style=color:#e6db74>}</span>_Linux-64bit.tar.gz
+<span style=color:#66d9ef>fi</span>
+
+echo <span style=color:#e6db74>&#34;Checking image&#34;</span>
+trivy image --vuln-type os --exit-code <span style=color:#ae81ff>1</span> $IMAGE
+</code></pre></div><p>Trivy has started including a bunch of other checks for library packages and configuration. specifying image scan and only os packages lets us use other tools for those parts.</p>
+<p>Whitelisting vulnerabilities is done with a .trivyignore file like this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=color:#75715e># some reason for whitelisting</span>
+CVE-XXXX-XXXX
+</code></pre></div><h1 id=infrastructure-as-code-scanning>
+<a href=#infrastructure-as-code-scanning class=heading>Infrastructure as code scanning</a>
+</h1>
+<p><a href=https://kics.io rel=noopener>kics</a> likely handles all your IaC scanning needs, it can find configuration issues with most IaC tools. You should scan all infrastructure repositories, less obvious is that you should likely also scan all application directories for Dockerfile and Helm issues.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#!/bin/bash
+</span><span style=color:#75715e></span>
+set -eu
+
+SCANNER_VERSION<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;latest&#34;</span>
+SCAN_DIRECTORY<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>
+REPORTS_DIRECTORY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span><span style=color:#e6db74>/reports&#34;</span>
+
+<span style=color:#66d9ef>if</span> <span style=color:#f92672>[</span> ! -d <span style=color:#e6db74>&#34;</span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span> <span style=color:#f92672>]</span>; <span style=color:#66d9ef>then</span>
+  echo <span style=color:#e6db74>&#34;Creating reports directory: </span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span>
+  mkdir -p <span style=color:#e6db74>&#34;</span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span>
+<span style=color:#66d9ef>fi</span>
+tf
+echo <span style=color:#e6db74>&#34;Ensure we have the latest version of IaC scanner&#34;</span>
+docker pull checkmarx/kics:latest
+
+echo <span style=color:#e6db74>&#34;Execute IaC scan in </span>$SCAN_DIRECTORY<span style=color:#e6db74>&#34;</span>
+docker run --rm <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -u <span style=color:#66d9ef>$(</span>id -u <span style=color:#e6db74>${</span>USER<span style=color:#e6db74>}</span><span style=color:#66d9ef>)</span>:<span style=color:#66d9ef>$(</span>id -g <span style=color:#e6db74>${</span>USER<span style=color:#e6db74>}</span><span style=color:#66d9ef>)</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --volume <span style=color:#e6db74>&#34;</span>$SCAN_DIRECTORY<span style=color:#e6db74>&#34;</span>:/path <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --volume <span style=color:#e6db74>&#34;</span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span>:/reports <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  checkmarx/kics:$SCANNER_VERSION scan <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --path <span style=color:#e6db74>&#34;/path&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --output-path <span style=color:#e6db74>&#34;/reports&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --report-formats <span style=color:#e6db74>&#34;html,json,sarif&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --output-name <span style=color:#e6db74>&#34;kics-results&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --fail-on <span style=color:#e6db74>&#34;high&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --exclude-categories <span style=color:#e6db74>&#34;Best Practices&#34;</span>
+</code></pre></div><p>False positives can be ignored with a comment:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-terraform data-lang=terraform><span style=color:#75715e># kics-scan ignore-line
+</span><span style=color:#75715e># which ignores that line and the one after, so put it on it&#39;s own on the line before
+</span></code></pre></div><p>We&rsquo;ve ignored the best practices category, those findings are better handled using a linter that can be configured to show warnings within IDE.</p>
+<h1 id=penetration-testing>
+<a href=#penetration-testing class=heading>Penetration testing</a>
+</h1>
+<p><a href=https://www.zaproxy.org/ rel=noopener>Owasp ZAP</a> is a nice tool for automating application penetration testing. They provide great starting points for penetration tests of web applications and apis. If you want more there&rsquo;s a pretty good ecosystem around it and you can add new scenarios.</p>
+<p>It&rsquo;s rules are divided into passive and active, passive is read only while active actually tries sending payloads. Next steps are under the assumption that you own the application you&rsquo;re testing.</p>
+<p>For a public web application it&rsquo;s rather easy to get started, you can run a scan with just this command.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>docker run -t owasp/zap2docker-stable zap-full-scan.py <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --target https://www.example.com
+  <span style=color:#75715e>#-j # ajax spidering, include for javascript based applications</span>
+</code></pre></div><p>For an API with an OpenAPI spec (swagger for example) or GraphQL endpoint with introspection allowed:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>docker run -t owasp/zap2docker-stable zap-api-scan.py <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --target https://www.example.com/swagger.json
+</code></pre></div><p>Last time I tried the GraphQL one the spidering ended up being a massive list of endpoints and it could be the same for both application scan and API scan. Unless that list is massive though it&rsquo;s fast enough for running as part of every deploy. You could do it as part of build by running it against a local version. Running it after a deploy though means you&rsquo;re also testing the infrastructure, it probably happens a bit less frequently and the odds of someone actually waiting for it to complete are a bit lower.</p>
+<p>We do want to configure rules, generate reports and generally tune things a bit more though so let&rsquo;s dig a little deeper.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=color:#75715e># zap-rules.config</span>
+*       FAIL
+xxxxx   WARN
+*       OUTOFSCOPE  regex of stuff to skip
+</code></pre></div><p>Default to failing on all rules, add WARN, IGNORE or OUTOFSCOPE to tune. You can also have a progress file for issues that have already been placed in your issue tracker.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=color:#75715e># zap-progress.json</span>
+<span style=color:#f92672>{</span>
+	<span style=color:#e6db74>&#34;site&#34;</span> : <span style=color:#e6db74>&#34;www.example.com&#34;</span>,
+	<span style=color:#e6db74>&#34;issues&#34;</span> : <span style=color:#f92672>[</span>
+		<span style=color:#f92672>{</span> 
+			<span style=color:#e6db74>&#34;id&#34;</span> : <span style=color:#e6db74>&#34;10016&#34;</span>,
+			<span style=color:#e6db74>&#34;name&#34;</span> : <span style=color:#e6db74>&#34;Web Browser XSS Protection Not Enabled&#34;</span>,
+			<span style=color:#e6db74>&#34;state&#34;</span> : <span style=color:#e6db74>&#34;inprogress&#34;</span>,
+			<span style=color:#e6db74>&#34;link&#34;</span>: <span style=color:#e6db74>&#34;https://www.example.com/bugtracker/issue=1234&#34;</span>
+		<span style=color:#f92672>}</span>
+	<span style=color:#f92672>]</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><p>To execute an API scan with configuration included (application scanning is nearly identical and therefore skipped).</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=color:#75715e>#!/bin/bash
+</span><span style=color:#75715e></span>
+set -eu
+
+SCANNER_VERSION<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;latest&#34;</span>
+CONFIGURATION_DIRECTORY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span><span style=color:#e6db74>&#34;</span>
+REPORTS_DIRECTORY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span><span style=color:#e6db74>/reports&#34;</span>
+TARGET_URL<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;https://www.example.com/swagger.json&#34;</span>
+
+echo <span style=color:#e6db74>&#34;Ensure we have the latest version of zap&#34;</span>
+docker pull owasp/zap2docker-stable:$SCANNER_VERSION
+
+echo <span style=color:#e6db74>&#34;Scan code in </span>$SCAN_DIRECTORY<span style=color:#e6db74> using zap&#34;</span>
+docker run --rm <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -u <span style=color:#66d9ef>$(</span>id -u <span style=color:#e6db74>${</span>USER<span style=color:#e6db74>}</span><span style=color:#66d9ef>)</span>:<span style=color:#66d9ef>$(</span>id -g <span style=color:#e6db74>${</span>USER<span style=color:#e6db74>}</span><span style=color:#66d9ef>)</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -t <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --volume <span style=color:#e6db74>&#34;</span>$CONFIGURATION_DIRECTORY<span style=color:#e6db74>&#34;</span>:/configuration <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --volume <span style=color:#e6db74>&#34;</span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span>:/reports <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  owasp/zap2docker-stable:$SCANNER_VERSION zap-api-scan.py <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -r /reports/zap-report.html <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -J /reports/zap-report.json <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -c /configuration/zap-rules.config <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -p /configuration/zap-progress.json <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -I <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -t $TARGET_URL
+</code></pre></div><p>You may also want to include a context configuration file for specifying how to authenticate and which urls should be included in scope for the scanning. Configure context using ZAP desktop and pass it in like this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>-n /configuration/zap-context.config
+</code></pre></div><h1 id=signal-to-noise-ratio>
+<a href=#signal-to-noise-ratio class=heading>Signal to noise ratio</a>
+</h1>
+<p>The idea with all checks above is to stop the worst issues by breaking builds. It&rsquo;s important to tune it so that it doesn&rsquo;t become a source of frustration. I&rsquo;ve tried to define good starting options but the risk vs frustration tradeoff is going to be different for every project.</p>
+<p>It&rsquo;s also important that there&rsquo;s always escape hatches, a defined way of suppressing a warning, which I hope I&rsquo;ve defined reasonably for all of them. You&rsquo;ll also need a strategy for what&rsquo;s supposed to happen when something is suppressed. If it&rsquo;s an obvious false positive it can just be suppressed, if it can be quickly fixed then just do that. But for more complicated cases you might want to create an issue in your issue tracker for every suppression. Added suppressions should be carefully reviewed as part of code review.</p>
+</div>
+<div class=pagination>
+<a href=# class=top>Top</a>
+</div>
+</main>
+<footer>
+<span>
+&copy; <time datetime="2023-11-21 20:29:13.256907348 +0000 UTC m=+0.112892411">2023</time> Kristoffer Lind. Made with <a href=https://gohugo.io rel=noopener>Hugo</a> using the <a href=https://github.com/kristofferlind/tale-hugo/ rel=noopener>Tale</a> theme.
+</span>
+</footer>
+</body>
+</html>

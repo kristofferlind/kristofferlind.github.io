@@ -1,0 +1,136 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Switching blog engine to Hugo &#183; Kristoffer Lind - Developer, Technologist, Blogger</title>
+<meta name=description content="Recap of my adventure in moving from Gatsby to Hugo, why I did it and some comparisons between them.">
+<link rel=canonical href=/blog/switching-blog-engine-to-hugo/>
+<style>*{line-height:1.5}html,body{color:#555;background-color:#fff;margin:0;padding:0}html{font-family:times new roman,Times,serif;font-size:14px;overflow-y:scroll}@media(min-width:600px){html{font-size:18px}}h1,h2,h3,h4,h5,h6,.heading{color:#353535;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;line-height:normal}a{color:#4a9ae1;text-decoration:none}blockquote{border-left:.25rem solid #e5e5e5;color:#979797;margin:.8rem 0;padding:.5rem 1rem}blockquote p:last-child{margin-bottom:0}@media(min-width:600px){blockquote{padding:0 5rem 0 1.25rem}}img{display:block;margin:0 0 1rem;max-width:100%;object-fit:scale-down}td{vertical-align:top}@media(prefers-color-scheme:dark){html,body{background-color:#333;color:#ddd}h1,h2,h3,h4,h5,h6,.heading{color:#ccc}blockquote{color:#979797}}.highlight pre{padding:1rem;border-radius:3px;overflow-x:auto;font-size:.8rem}.post{padding:3rem 0}.post-info{color:#aaa;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;letter-spacing:.5px;text-align:center}.post-info span{font-style:italic}.post-title{color:#353535;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:2rem;margin:1rem 0;text-align:center}@media(min-width:600px){.post-title{font-size:3rem}}.post-line{border-top:.4rem solid #353535;display:block;margin:0 auto 3rem;width:4rem}.post p{margin:0 0 1rem;text-align:justify}.post a:hover{text-decoration:underline}.post img{margin:0 auto .5rem}.post img+em{color:#aaa;display:block;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:.9rem;font-style:normal;text-align:center}@media(prefers-color-scheme:dark){.post-info{color:#ccc}.post-title{color:#eee}.post img+em{color:#ccc}}.container{margin:0 auto;max-width:800px;width:80%}main,footer,.nav-container{display:block;margin:0 auto;max-width:800px;width:80%}.nav{box-shadow:0 2px 2px -2px rgba(0,0,0,.2);overflow:auto}.nav-container{margin:1rem auto;position:relative;text-align:center}.nav-title{color:#555;display:inline-block;margin:0;padding-right:.2rem}.nav-title:hover,.nav-title:focus{opacity:.6}.nav ul{list-style-type:none;margin:1rem 0 0;padding:0;text-align:center}.nav li{color:#555;display:inline-block;opacity:.6;padding:0 2rem 0 0}.nav li:last-child{padding-right:0}.nav li:hover,.nav li:focus{opacity:1}.nav a{color:#555;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif}@media(min-width:600px){.nav-container{text-align:left}.nav ul{bottom:0;position:absolute;right:0}}footer{font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;padding:2rem 0;text-align:center}footer span{color:#555;font-size:.8rem}@media(prefers-color-scheme:dark){.nav{box-shadow:0 2px 2px -2px rgba(255,255,255,.2)}.nav-title{color:#ddd}.nav li{color:#ddd}.nav a{color:#ddd}footer span{color:#ddd}}.pagination{border-top:.5px solid #e5e5e5;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;padding-top:2rem;position:relative;text-align:center}.pagination span{color:#353535;font-size:1.1rem}.pagination .top{color:#555;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:1.1rem;opacity:.6}.pagination .top:hover{opacity:1}.pagination .arrow{color:#555;position:absolute}.pagination .arrow:hover,.pagination .arrow:focus{opacity:.6;text-decoration:none}.pagination .left{left:0}.pagination .right{right:0}@media(prefers-color-scheme:dark){.pagination span{color:#ccc}.pagination .top{color:#ddd}.pagination .arrow{color:#ddd}}.catalogue-item{border-bottom:1px solid #e5e5e5;display:block;padding:2rem 0}.catalogue-item:hover .catalogue-line,.catalogue-item:focus .catalogue-line{width:5rem}.catalogue-item:last-child{border:0}.catalogue-item a.entry{color:#555}.catalogue-time{color:#aaa;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;letter-spacing:.5px}.catalogue-title{color:#353535;display:block;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:1.6rem;font-weight:700;margin:.5rem 0}@media(min-width:600px){.catalogue-title{font-size:1.8rem}}.catalogue-line{border-top:.2rem solid #353535;display:block;width:2rem}.catalogue p{margin-bottom:.25rem}.catalogue .tags{display:flex;justify-content:flex-end}.catalogue.archive{margin-bottom:.25rem}.catalogue.archive article{box-sizing:border-box;display:flex;justify-content:space-between}@media(prefers-color-scheme:dark){.catalogue-item a.entry{color:#eee}.catalogue-title{color:#ddd}}</style>
+<link rel=icon type=image/png sizes=32x32 href=/images/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/images/favicon-16x16.png>
+<link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png>
+<link href rel=alternate type=application/rss+xml title="Kristoffer Lind - Developer, Technologist, Blogger">
+<script async type=text/javascript src=https://www.lind.sh/js/index.79b056912be7157f2501588e9a504af685b2c5e0f50a84a4699aedebeec5a92b27ceccb62d381eaa7f263026fa2836d5628e85f5478b70da6a9c7f2648c5344d.js integrity="sha512-ebBWkSvnFX8lAViOmlBK9oWyxeD1CoSkaZrt6+7FqSsnzsy2LTgeqn8mMCb6KDbVYo6F9UeLcNpqnH8mSMU0TQ=="></script>
+</head>
+<body>
+<nav class=nav>
+<div class=nav-container>
+<a href=/>
+<h2 class=nav-title>Kristoffer Lind</h2>
+</a>
+<ul>
+<li>
+<a href=/about/>
+<span>Who am I?</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<main>
+<div class=post>
+<div class=post-info>
+<span>Written by</span>
+Kristoffer Lind
+<br>
+<span>on&nbsp;</span><time datetime="November 20, 2021">November 20, 2021</time>
+</div>
+<h1 class=post-title>Switching blog engine to Hugo</h1>
+<div class=post-line></div>
+<p>Will this blog be entirely meta? a blog about a blog? Who knows? :) A collection of notes and thoughts from switching from Gatsby to Hugo, why I did it and a bit of comparison.</p>
+<h1 id=why>
+<a href=#why class=heading>Why?</a>
+</h1>
+<p>The fact that Gatsby included tons of javascript for pretty much no functionality bothered me and I wanted to try something else. Hugo seemed like a good choice. It&rsquo;s popular, supposedly really fast and seemed to do what I wanted it to and not much else, meaning it should be simple.</p>
+<h1 id=getting-started>
+<a href=#getting-started class=heading>Getting started</a>
+</h1>
+<ul>
+<li>Get Hugo in whichever way you prefer.</li>
+<li>Create barebones blog using: <code>hugo new site blog</code>.</li>
+</ul>
+<p>Next up is picking a theme. I wanted something minimalistic that looked decent (just like last time, I&rsquo;m fine with changing logic, but I try to stay away from design work). After looking at the list of themes for a bit I picked tale. Originally built for Jekyll by Chester How and then ported to Hugo by Emiel Hollander.</p>
+<p>I thought that it was likely that I&rsquo;d be doing some changes, so I just forked it right away. Either that was a good choice, or I should&rsquo;ve spent some more time picking as I&rsquo;ve now spent a few hours making changes.</p>
+<p>While inside the folder of your blog include it by adding it as a submodule <code>git submodule add ./themes/&lt;name of theme> &lt;git-url of theme></code>. Set theme in config.toml <code>theme = &lt;theme-name></code> (theme name needs to match directory name in themes/).</p>
+<h1 id=add-content>
+<a href=#add-content class=heading>Add content</a>
+</h1>
+<p>Start server to see the effect of changes <code>hugo server --buildDrafts</code>, I then copied the markdown files from Gatsby content directory to Hugo content directory, with a few minor changes to frontmatter. For this theme, posts in content/blog are posts and in content/ will be pages (this is where I put the about.md page).</p>
+<h1 id=deploy>
+<a href=#deploy class=heading>Deploy</a>
+</h1>
+<p>Build minified with <code>hugo --minify</code> and push the ./public directory to gh-pages. Hugo recommends a 3rd party github action for deploying to gh-pages, but it seemed silly to pull in a dependency to replace a couple of commands.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd ./public
+
+<span style=color:#75715e># create repository</span>
+git init .
+
+<span style=color:#75715e># git user needs to be configured</span>
+git config user.name <span style=color:#e6db74>&#34;Deployer&#34;</span>
+git config user.email <span style=color:#e6db74>&#34;deploy-bot@github&#34;</span>
+
+<span style=color:#75715e># setup remote</span>
+git remote add deploy-repo $REPOSITORY_URL
+git checkout -b gh-pages
+git add -A
+git commit -m <span style=color:#e6db74>&#34;Deploy&#34;</span>
+
+<span style=color:#75715e># need to force push as it&#39;s not in sync</span>
+git push deploy-repo --force
+</code></pre></div><p>REPOSITORY_URL needs to include the token like this: <code>https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/user/project</code>.</p>
+<h2 id=custom-dns>
+<a href=#custom-dns class=heading>Custom DNS</a>
+</h2>
+<p>You&rsquo;ll need a CNAME file in the root of your $USERNAME.github.io repository. It can be added in the deploy script like this: <code>echo "$BASE_URL" > CNAME</code>. You&rsquo;ll also need to setup a CNAME record that points to $USERNAME.github.io.</p>
+<h1 id=conclusions-hugo-vs-gatsby>
+<a href=#conclusions-hugo-vs-gatsby class=heading>Conclusions (hugo vs gatsby)</a>
+</h1>
+<p>Mostly related to the theme I picked, but I did spend quite a bit more time fixing the theme this time around. If you&rsquo;re better than me at picking a theme though it&rsquo;s easier to get started with.</p>
+<p>Installation is just a binary, whereas with gatsby you&rsquo;ll need nodejs as a prerequisite followed by a gazillion npm packages. Theme modifications are also a bit simpler, with hugo it&rsquo;s mostly vanilla html and js, along with a templating language (and some golang if you delve deeper). With gatsby you&rsquo;ll need to understand js, graphql, react and their ecosystems (very popular choices so lot&rsquo;s of people know them anyway, but still). Gatsby includes most of what you need for building a rather advanced application, if I were to do so I&rsquo;d probably still want it to be built separately from the blog though.</p>
+<p>You&rsquo;ll have more options with gatsby, but those also increase complexity. Gatsby does however come with more performance optimizations out of the box, with Hugo prefetching/prerendering related pages needs to be implemented by the theme or you. On the other hand Hugo doesn&rsquo;t require you to ship the entire js ecosystem along with your generated pages.</p>
+<p>Gatsby:</p>
+<ul>
+<li>more options</li>
+<li>more built-in performance optimizations</li>
+<li>allows more aggressive caching</li>
+</ul>
+<p>Hugo:</p>
+<ul>
+<li>less cruft included in generated page</li>
+<li>faster builds</li>
+<li>less complicated</li>
+</ul>
+<h1 id=interested-in-this-particular-setup>
+<a href=#interested-in-this-particular-setup class=heading>Interested in this particular setup?</a>
+</h1>
+<p>Both the <a href=https://github.com/kristofferlind/tale-hugo rel=noopener>theme</a> and <a href=https://github.com/kristofferlind/kristofferlind.github.io rel=noopener>this blog</a> are available on github. I made a setup where the top repo is private and houses draft content and notes. That way I can include draft content when running locally using <code>hugo server --contentDir ../draft-content</code>. It also enables saving progress of those posts, while only exposing published content on github.</p>
+<p>Theme modifications:</p>
+<ul>
+<li>remove disqus and google analytics support</li>
+<li>fix syntax highlighting and fit code blocks on mobile</li>
+<li>support menu, tags, categories and differentiating between pages and posts</li>
+<li>prevent FOUC (flash of unstyled content)</li>
+<li>prefetch/prerender links on likely click intent</li>
+<li>add document meta description</li>
+<li>rel canonical tags</li>
+<li>explicit width and height for images</li>
+<li>image processing (scale down to 800px width)</li>
+<li>remove custom fonts</li>
+<li>only display pagination if enough entries</li>
+<li>noopener on external links</li>
+<li>allow links to headers</li>
+<li>dark mode</li>
+</ul>
+<p>Removing disqus and google analytics support might seem a bit odd, but I haven&rsquo;t tested them and I don&rsquo;t want to encourage their use. Custom fonts felt a bit silly when they were by far the heaviest part of page load. Image optimizations and prefetch/prerender are really the only interesting parts, you can read about them <a href=/blog/hugo-theme-performance-optimizations>here</a>.</p>
+</div>
+<div class=pagination>
+<a href=# class=top>Top</a>
+</div>
+</main>
+<footer>
+<span>
+&copy; <time datetime="2023-11-21 20:29:13.194426825 +0000 UTC m=+0.050411878">2023</time> Kristoffer Lind. Made with <a href=https://gohugo.io rel=noopener>Hugo</a> using the <a href=https://github.com/kristofferlind/tale-hugo/ rel=noopener>Tale</a> theme.
+</span>
+</footer>
+</body>
+</html>

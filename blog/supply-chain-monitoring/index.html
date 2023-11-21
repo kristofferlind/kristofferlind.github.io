@@ -1,0 +1,219 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Supply-chain monitoring &#183; Kristoffer Lind - Developer, Technologist, Blogger</title>
+<meta name=description content="Inventory based security monitoring of your supply chain, in this post we'll automate producing inventory specifications and then utilize those specifications to monitor for known vulnerabilities and license issues.">
+<link rel=canonical href=/blog/supply-chain-monitoring/>
+<style>*{line-height:1.5}html,body{color:#555;background-color:#fff;margin:0;padding:0}html{font-family:times new roman,Times,serif;font-size:14px;overflow-y:scroll}@media(min-width:600px){html{font-size:18px}}h1,h2,h3,h4,h5,h6,.heading{color:#353535;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;line-height:normal}a{color:#4a9ae1;text-decoration:none}blockquote{border-left:.25rem solid #e5e5e5;color:#979797;margin:.8rem 0;padding:.5rem 1rem}blockquote p:last-child{margin-bottom:0}@media(min-width:600px){blockquote{padding:0 5rem 0 1.25rem}}img{display:block;margin:0 0 1rem;max-width:100%;object-fit:scale-down}td{vertical-align:top}@media(prefers-color-scheme:dark){html,body{background-color:#333;color:#ddd}h1,h2,h3,h4,h5,h6,.heading{color:#ccc}blockquote{color:#979797}}.highlight pre{padding:1rem;border-radius:3px;overflow-x:auto;font-size:.8rem}.post{padding:3rem 0}.post-info{color:#aaa;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;letter-spacing:.5px;text-align:center}.post-info span{font-style:italic}.post-title{color:#353535;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:2rem;margin:1rem 0;text-align:center}@media(min-width:600px){.post-title{font-size:3rem}}.post-line{border-top:.4rem solid #353535;display:block;margin:0 auto 3rem;width:4rem}.post p{margin:0 0 1rem;text-align:justify}.post a:hover{text-decoration:underline}.post img{margin:0 auto .5rem}.post img+em{color:#aaa;display:block;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:.9rem;font-style:normal;text-align:center}@media(prefers-color-scheme:dark){.post-info{color:#ccc}.post-title{color:#eee}.post img+em{color:#ccc}}.container{margin:0 auto;max-width:800px;width:80%}main,footer,.nav-container{display:block;margin:0 auto;max-width:800px;width:80%}.nav{box-shadow:0 2px 2px -2px rgba(0,0,0,.2);overflow:auto}.nav-container{margin:1rem auto;position:relative;text-align:center}.nav-title{color:#555;display:inline-block;margin:0;padding-right:.2rem}.nav-title:hover,.nav-title:focus{opacity:.6}.nav ul{list-style-type:none;margin:1rem 0 0;padding:0;text-align:center}.nav li{color:#555;display:inline-block;opacity:.6;padding:0 2rem 0 0}.nav li:last-child{padding-right:0}.nav li:hover,.nav li:focus{opacity:1}.nav a{color:#555;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif}@media(min-width:600px){.nav-container{text-align:left}.nav ul{bottom:0;position:absolute;right:0}}footer{font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;padding:2rem 0;text-align:center}footer span{color:#555;font-size:.8rem}@media(prefers-color-scheme:dark){.nav{box-shadow:0 2px 2px -2px rgba(255,255,255,.2)}.nav-title{color:#ddd}.nav li{color:#ddd}.nav a{color:#ddd}footer span{color:#ddd}}.pagination{border-top:.5px solid #e5e5e5;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;padding-top:2rem;position:relative;text-align:center}.pagination span{color:#353535;font-size:1.1rem}.pagination .top{color:#555;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:1.1rem;opacity:.6}.pagination .top:hover{opacity:1}.pagination .arrow{color:#555;position:absolute}.pagination .arrow:hover,.pagination .arrow:focus{opacity:.6;text-decoration:none}.pagination .left{left:0}.pagination .right{right:0}@media(prefers-color-scheme:dark){.pagination span{color:#ccc}.pagination .top{color:#ddd}.pagination .arrow{color:#ddd}}.catalogue-item{border-bottom:1px solid #e5e5e5;display:block;padding:2rem 0}.catalogue-item:hover .catalogue-line,.catalogue-item:focus .catalogue-line{width:5rem}.catalogue-item:last-child{border:0}.catalogue-item a.entry{color:#555}.catalogue-time{color:#aaa;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;letter-spacing:.5px}.catalogue-title{color:#353535;display:block;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:1.6rem;font-weight:700;margin:.5rem 0}@media(min-width:600px){.catalogue-title{font-size:1.8rem}}.catalogue-line{border-top:.2rem solid #353535;display:block;width:2rem}.catalogue p{margin-bottom:.25rem}.catalogue .tags{display:flex;justify-content:flex-end}.catalogue.archive{margin-bottom:.25rem}.catalogue.archive article{box-sizing:border-box;display:flex;justify-content:space-between}@media(prefers-color-scheme:dark){.catalogue-item a.entry{color:#eee}.catalogue-title{color:#ddd}}</style>
+<link rel=icon type=image/png sizes=32x32 href=/images/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/images/favicon-16x16.png>
+<link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png>
+<link href rel=alternate type=application/rss+xml title="Kristoffer Lind - Developer, Technologist, Blogger">
+<script async type=text/javascript src=https://www.lind.sh/js/index.79b056912be7157f2501588e9a504af685b2c5e0f50a84a4699aedebeec5a92b27ceccb62d381eaa7f263026fa2836d5628e85f5478b70da6a9c7f2648c5344d.js integrity="sha512-ebBWkSvnFX8lAViOmlBK9oWyxeD1CoSkaZrt6+7FqSsnzsy2LTgeqn8mMCb6KDbVYo6F9UeLcNpqnH8mSMU0TQ=="></script>
+</head>
+<body>
+<nav class=nav>
+<div class=nav-container>
+<a href=/>
+<h2 class=nav-title>Kristoffer Lind</h2>
+</a>
+<ul>
+<li>
+<a href=/about/>
+<span>Who am I?</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<main>
+<div class=post>
+<div class=post-info>
+<span>Written by</span>
+Kristoffer Lind
+<br>
+<span>on&nbsp;</span><time datetime="November 2, 2023">November 2, 2023</time>
+</div>
+<h1 class=post-title>Supply-chain monitoring</h1>
+<div class=post-line></div>
+<p>Software used in this article is locked to specific versions to increase the chance of it working as specified. Make sure you update all of it if you want to actually start using it after experimenting. I&rsquo;ve had this article lying around for a bit before publishing, so versions are pretty outdated even at time of publish.</p>
+<p>Automate building inventory specifications for your applications and monitor all those dependencies for known vulnerabilities and license issues. Set and enforce global policies to break builds. In this post we&rsquo;ll cover:</p>
+<ul>
+<li>containers with apk, deb, rpm, javascript, go, java and ruby dependencies.</li>
+<li>nuget packages</li>
+</ul>
+<p>You can expand on this to cover all software used and produced in your organization.</p>
+<p>Build machine images for VMs? produce inventory specifications for them and add checks to enforce policies. Are you using closed source software? appliances? have your vendors produce specifications. Maybe you&rsquo;re also a vendor, produce specifications and make them available to your customers, let them know that you care.</p>
+<h1 id=setup-inventory-monitoring>
+<a href=#setup-inventory-monitoring class=heading>Setup inventory monitoring</a>
+</h1>
+<p>We&rsquo;ll be using <a href=https://dependencytrack.org/ rel=noopener>OWASP DependencyTrack</a>, they supply docker images for the software components and there&rsquo;s also a <a href=https://github.com/evryfs/helm-charts/tree/master/charts/dependency-track rel=noopener>helm chart</a> available as a starting point.</p>
+<p>To quickly get started trying it out we&rsquo;ll just start it up locally with docker-compose. Create a docker-compose.yml file with this content:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:#75715e># docker-compose.yml</span>
+<span style=color:#f92672>version</span>: <span style=color:#e6db74>&#39;3.7&#39;</span>
+
+<span style=color:#f92672>volumes</span>:
+  <span style=color:#f92672>dependency-track</span>:
+
+<span style=color:#f92672>services</span>:
+  <span style=color:#f92672>dtrack-apiserver</span>:
+    <span style=color:#f92672>image</span>: <span style=color:#ae81ff>dependencytrack/apiserver</span>
+    <span style=color:#f92672>ports</span>:
+      - <span style=color:#e6db74>&#39;8081:8080&#39;</span>
+    <span style=color:#f92672>volumes</span>:
+      - <span style=color:#e6db74>&#39;dependency-track:/data&#39;</span>
+    <span style=color:#f92672>restart</span>: <span style=color:#ae81ff>unless-stopped</span>
+
+  <span style=color:#f92672>dtrack-frontend</span>:
+    <span style=color:#f92672>image</span>: <span style=color:#ae81ff>dependencytrack/frontend</span>
+    <span style=color:#f92672>depends_on</span>:
+      - <span style=color:#ae81ff>dtrack-apiserver</span>
+    <span style=color:#f92672>environment</span>:
+      - <span style=color:#ae81ff>API_BASE_URL=http://localhost:8081</span>
+    <span style=color:#f92672>ports</span>:
+      - <span style=color:#e6db74>&#34;8080:8080&#34;</span>
+    <span style=color:#f92672>restart</span>: <span style=color:#ae81ff>unless-stopped</span>
+</code></pre></div><p>Then start it up:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=color:#75715e># -d is detached mode, execute &#39;docker-compose down&#39; to stop</span>
+docker-compose up -d
+firefox http://localhost:8080
+</code></pre></div><p>You should now be looking at the login screen for your local instance of DependencyTrack. Log in with admin/admin as credentials and change the password when prompted. Go to administration -> access management -> teams -> automation and make a note of what the api key is, we&rsquo;ll need it for posting SBOM (software bill of materials) files to it&rsquo;s api.</p>
+<p>When starting up it will create local mirrors for vulnerability sources, so leave it running for a bit to avoid issues. Leaving it running while populating inventory, configuring policies and trying them out is likely enough, but you can check on the progress in the logs:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>docker-compose logs
+</code></pre></div><h1 id=build-and-populate-inventory>
+<a href=#build-and-populate-inventory class=heading>Build and populate inventory</a>
+</h1>
+<p>We now need to create SBOM files for everything we want to keep track of in DependencyTrack. We&rsquo;ll go through a few of them here and if you need more you can take a look at the <a href=https://cyclonedx.org/tool-center/ rel=noopener>CycloneDX tool center</a>. These tools also include options for scanning platforms at runtime for particular cases, which might be an alternative if there&rsquo;s a tool for your platform and you&rsquo;re not interested in blocking stuff earlier in the process.</p>
+<p>An important thing to note is that if you have more than one tool producing SBOM specifications you&rsquo;ll need to merge them before uploading. DependencyTrack does not support incremental changes, which makes sense, how on earth would it ever know about removed dependencies otherwise. We&rsquo;ll produce the specification from each tool and then have a later step pick them all up, merge them and upload them to the inventory service.</p>
+<h2 id=containers>
+<a href=#containers class=heading>Containers</a>
+</h2>
+<p>Container scanning with <a href=https://github.com/anchore/syft rel=noopener>syft</a> identifies OS packages from apk, dpkg, nix and rpm and most popular development ecosystems. They do have an incentive to nudge you into using their paid services, but there&rsquo;s lot&rsquo;s of alternatives and it&rsquo;s a great start in populating your inventory.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=color:#75715e># !/bin/bash</span>
+
+set -eu
+
+IMAGE<span style=color:#f92672>=</span>$1
+
+SYFT_VERSION<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;0.33.0&#34;</span>
+REPORTS_DIRECTORY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span><span style=color:#e6db74>/sbom&#34;</span>
+DEPENDENCY_TRACK_URI<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;localhost:8081&#34;</span>
+DEPENDENCY_TRACK_API_KEY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;dependencytrack api key&#34;</span>
+
+<span style=color:#66d9ef>if</span> <span style=color:#f92672>[</span> ! -d <span style=color:#e6db74>&#34;</span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span> <span style=color:#f92672>]</span>; <span style=color:#66d9ef>then</span>
+  echo <span style=color:#e6db74>&#34;Creating reports directory: </span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span>
+  mkdir -p <span style=color:#e6db74>&#34;</span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span>
+<span style=color:#66d9ef>fi</span>
+
+<span style=color:#66d9ef>if</span> ! hash syft 2&gt;/dev/null <span style=color:#f92672>||</span> ! syft version | grep -q <span style=color:#e6db74>&#34;</span>$SYFT_VERSION<span style=color:#e6db74>&#34;</span>; <span style=color:#66d9ef>then</span>
+  echo <span style=color:#e6db74>&#34;Install image inventory tool&#34;</span>
+  wget https://github.com/anchore/syft/releases/download/v<span style=color:#e6db74>${</span>SYFT_VERSION<span style=color:#e6db74>}</span>/syft_<span style=color:#e6db74>${</span>SYFT_VERSION<span style=color:#e6db74>}</span>_linux_amd64.tar.gz
+  tar -C ~/bin -zxf syft_<span style=color:#e6db74>${</span>SYFT_VERSION<span style=color:#e6db74>}</span>_linux_amd64.tar.gz
+  rm syft_<span style=color:#e6db74>${</span>SYFT_VERSION<span style=color:#e6db74>}</span>_linux_amd64.tar.gz
+<span style=color:#66d9ef>fi</span>
+
+REPORT_PATH<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span>$REPORTS_DIRECTORY<span style=color:#e6db74>/</span>$IMAGE<span style=color:#e6db74>-syft.json&#34;</span>
+
+echo <span style=color:#e6db74>&#34;Checking image&#34;</span>
+syft packages $IMAGE <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --output cyclonedx-json <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --file $REPORT_PATH
+</code></pre></div><h2 id=nuget-packages>
+<a href=#nuget-packages class=heading>Nuget packages</a>
+</h2>
+<p>Container inventory scanner does not fully support dotnet, so we&rsquo;ll need to set that up individually. <a href=https://github.com/CycloneDX/cyclonedx-dotnet rel=noopener>CycloneDX-dotnet</a> can build dotnet inventory specifications based on .csproj or .sln files.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=color:#75715e># !/bin/bash</span>
+
+set -eu
+
+SCANNER_VERSION<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;latest&#34;</span>
+SCAN_DIRECTORY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span><span style=color:#e6db74>&#34;</span>
+REPORTS_DIRECTORY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span><span style=color:#e6db74>/sbom&#34;</span>
+DEPENDENCY_TRACK_URI<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;localhost:8081&#34;</span>
+DEPENDENCY_TRACK_API_KEY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;dependencytrack api key&#34;</span>
+
+<span style=color:#66d9ef>if</span> <span style=color:#f92672>[</span> ! -d <span style=color:#e6db74>&#34;</span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span> <span style=color:#f92672>]</span>; <span style=color:#66d9ef>then</span>
+  echo <span style=color:#e6db74>&#34;Creating reports directory: </span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span>
+  mkdir -p <span style=color:#e6db74>&#34;</span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span>
+<span style=color:#66d9ef>fi</span>
+
+echo <span style=color:#e6db74>&#34;Retrieve dotnet inventory image&#34;</span>
+docker pull cyclonedx/cyclonedx-dotnet:$SCANNER_VERSION
+
+echo <span style=color:#e6db74>&#34;Build dotnet application inventory&#34;</span>
+docker run --rm <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --volume <span style=color:#e6db74>&#34;</span>$SCAN_DIRECTORY<span style=color:#e6db74>&#34;</span>:/path <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --volume <span style=color:#e6db74>&#34;</span>$REPORTS_DIRECTORY<span style=color:#e6db74>&#34;</span>:/reports <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  cyclonedx/cyclonedx-dotnet:$SCANNER_VERSION <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    /path <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --out <span style=color:#e6db74>&#34;/reports&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --disable-package-restore <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --json
+</code></pre></div><h2 id=merge-and-upload-inventory-specifications>
+<a href=#merge-and-upload-inventory-specifications class=heading>Merge and upload inventory specifications</a>
+</h2>
+<p>A single specification is required per version of a project. If multiple tools were required to build the specifications the results will need to be merged, otherwise that step can be skipped. Operations on specification files can be done with <a href=https://github.com/CycloneDX/cyclonedx-cli rel=noopener>cyclonedx-cli</a>.</p>
+<p>The merged result should then be uploaded to DependencyTrack.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=color:#75715e>#!/bin/bash
+</span><span style=color:#75715e></span>
+set -eu
+
+PROJECT_NAME<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;some-project&#34;</span>
+PROJECT_VERSION<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;some-version&#34;</span>
+DEPENDENCY_TRACK_URI<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;localhost:8081&#34;</span>
+DEPENDENCY_TRACK_API_KEY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;&#34;</span>
+
+CYCLONEDX_VERSION<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;0.21.0&#34;</span>
+REPORTS_DIRECTORY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span><span style=color:#e6db74>/sbom&#34;</span>
+INVENTORY_SPECIFICATIONS<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>find $REPORTS_DIRECTORY -type f | awk <span style=color:#e6db74>&#39;{printf &#34;%s &#34;, $0}&#39;</span><span style=color:#66d9ef>)</span>
+
+<span style=color:#66d9ef>if</span> ! hash cyclonedx 2&gt;/dev/null <span style=color:#f92672>||</span> ! cyclonedx --version | grep -q <span style=color:#e6db74>&#34;</span>$CYCLONEDX_VERSION<span style=color:#e6db74>&#34;</span>; <span style=color:#66d9ef>then</span>
+  echo <span style=color:#e6db74>&#34;Install specifications utility&#34;</span>
+  wget https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.21.0/cyclonedx-linux-x64
+  mv ./cyclonedx-linux-x64 ~/bin/cyclonedx
+  chmod +x ~/bin/cyclonedx
+<span style=color:#66d9ef>fi</span>
+
+echo <span style=color:#e6db74>&#34;Merge inventory specifications&#34;</span>
+cyclonedx merge <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --input-files $INVENTORY_SPECIFICATIONS <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --output-file $REPORTS_DIRECTORY/full-inventory.json
+
+echo <span style=color:#e6db74>&#34;Upload results to DependencyTrack&#34;</span>
+curl -X <span style=color:#e6db74>&#34;POST&#34;</span> <span style=color:#e6db74>&#34;http://</span><span style=color:#e6db74>${</span>DEPENDENCY_TRACK_URI<span style=color:#e6db74>}</span><span style=color:#e6db74>/api/v1/bom&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>     -H <span style=color:#e6db74>&#34;Content-Type: multipart/form-data&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>     -H <span style=color:#e6db74>&#34;X-API-Key: </span>$DEPENDENCY_TRACK_API_KEY<span style=color:#e6db74>&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>     -F <span style=color:#e6db74>&#34;bom=@</span>$REPORTS_DIRECTORY<span style=color:#e6db74>/full-inventory.json&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>     -F <span style=color:#e6db74>&#34;projectName=</span>$PROJECT_NAME<span style=color:#e6db74>&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>     -F <span style=color:#e6db74>&#34;projectVersion=</span>$PROJECT_VERSION<span style=color:#e6db74>&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>     -F <span style=color:#e6db74>&#34;autoCreate=true&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>     -v
+
+echo <span style=color:#e6db74>&#34;Remove merged result to allow reruns&#34;</span>
+rm -f $REPORTS_DIRECTORY/full-inventory.json
+</code></pre></div><h2 id=utilize-the-information>
+<a href=#utilize-the-information class=heading>Utilize the information</a>
+</h2>
+<p>You now have a source of information for vulnerabilities and license issues over time and when there&rsquo;s a particularly nasty vulnerability found, you can select that vulnerability and get a list of all your affected software. It&rsquo;s also a great indicator of where to spend some extra effort updating, I suggest adding reviewing this information as an action in one of your weekly or monthly meetings, including picking a target for improvement until the next meeting.</p>
+<p>Configure a policy for the worst violations (no copyleft licenses or critical vulnerabilities for example), you can also tag services as public or sensitive for more advanced settings. Use notifications or a blocking build step in pull requests as a countermeasure (be very careful with the noisiness of these).</p>
+<p>Ideally you&rsquo;ve been careful enough about bringing in dependencies that you can evaluate each vulnerability finding to suppress findings that are false positives or does not affect you and just patch the ones that are left. But I&rsquo;m guessing you are now looking at hundreds to thousands of instances of known vulnerabilities and can&rsquo;t investigate them individually yet, here are some suggested approaches to start moving to a point where that is an option:</p>
+<ul>
+<li>Automate updating vulnerable dependencies and automate updates where that isn&rsquo;t an option</li>
+<li>Improve automated validation of releases to allow bigger updates to pass through without manual efforts</li>
+<li>Regular targeted efforts to improve these metrics</li>
+<li>Minimize your amount of dependencies to reduce the amount of findings to be considered (do you need to support that format? do you need dependencies to check if that number is even or odd? do you need to generate a spreadsheet for download or would it be better to just supply the data?)</li>
+<li>Sort of the same as above, but switch to minimal distributions for docker images(distroless if possible) and VMs (you probably don&rsquo;t need a window manager or tooling for video playback to run your web service, right?)</li>
+</ul>
+</div>
+<div class=pagination>
+<a href=# class=top>Top</a>
+</div>
+</main>
+<footer>
+<span>
+&copy; <time datetime="2023-11-21 20:29:13.192485918 +0000 UTC m=+0.048470961">2023</time> Kristoffer Lind. Made with <a href=https://gohugo.io rel=noopener>Hugo</a> using the <a href=https://github.com/kristofferlind/tale-hugo/ rel=noopener>Tale</a> theme.
+</span>
+</footer>
+</body>
+</html>

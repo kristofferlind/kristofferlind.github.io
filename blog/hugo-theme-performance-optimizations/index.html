@@ -1,0 +1,263 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Hugo performance optimizations &#183; Kristoffer Lind - Developer, Technologist, Blogger</title>
+<meta name=description content="Performance optimizations for Hugo themes, image processing, CSS optimizations and prefetch/prerender pages on likely click intent.">
+<link rel=canonical href=/blog/hugo-theme-performance-optimizations/>
+<style>*{line-height:1.5}html,body{color:#555;background-color:#fff;margin:0;padding:0}html{font-family:times new roman,Times,serif;font-size:14px;overflow-y:scroll}@media(min-width:600px){html{font-size:18px}}h1,h2,h3,h4,h5,h6,.heading{color:#353535;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;line-height:normal}a{color:#4a9ae1;text-decoration:none}blockquote{border-left:.25rem solid #e5e5e5;color:#979797;margin:.8rem 0;padding:.5rem 1rem}blockquote p:last-child{margin-bottom:0}@media(min-width:600px){blockquote{padding:0 5rem 0 1.25rem}}img{display:block;margin:0 0 1rem;max-width:100%;object-fit:scale-down}td{vertical-align:top}@media(prefers-color-scheme:dark){html,body{background-color:#333;color:#ddd}h1,h2,h3,h4,h5,h6,.heading{color:#ccc}blockquote{color:#979797}}.highlight pre{padding:1rem;border-radius:3px;overflow-x:auto;font-size:.8rem}.post{padding:3rem 0}.post-info{color:#aaa;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;letter-spacing:.5px;text-align:center}.post-info span{font-style:italic}.post-title{color:#353535;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:2rem;margin:1rem 0;text-align:center}@media(min-width:600px){.post-title{font-size:3rem}}.post-line{border-top:.4rem solid #353535;display:block;margin:0 auto 3rem;width:4rem}.post p{margin:0 0 1rem;text-align:justify}.post a:hover{text-decoration:underline}.post img{margin:0 auto .5rem}.post img+em{color:#aaa;display:block;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:.9rem;font-style:normal;text-align:center}@media(prefers-color-scheme:dark){.post-info{color:#ccc}.post-title{color:#eee}.post img+em{color:#ccc}}.container{margin:0 auto;max-width:800px;width:80%}main,footer,.nav-container{display:block;margin:0 auto;max-width:800px;width:80%}.nav{box-shadow:0 2px 2px -2px rgba(0,0,0,.2);overflow:auto}.nav-container{margin:1rem auto;position:relative;text-align:center}.nav-title{color:#555;display:inline-block;margin:0;padding-right:.2rem}.nav-title:hover,.nav-title:focus{opacity:.6}.nav ul{list-style-type:none;margin:1rem 0 0;padding:0;text-align:center}.nav li{color:#555;display:inline-block;opacity:.6;padding:0 2rem 0 0}.nav li:last-child{padding-right:0}.nav li:hover,.nav li:focus{opacity:1}.nav a{color:#555;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif}@media(min-width:600px){.nav-container{text-align:left}.nav ul{bottom:0;position:absolute;right:0}}footer{font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;padding:2rem 0;text-align:center}footer span{color:#555;font-size:.8rem}@media(prefers-color-scheme:dark){.nav{box-shadow:0 2px 2px -2px rgba(255,255,255,.2)}.nav-title{color:#ddd}.nav li{color:#ddd}.nav a{color:#ddd}footer span{color:#ddd}}.pagination{border-top:.5px solid #e5e5e5;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;padding-top:2rem;position:relative;text-align:center}.pagination span{color:#353535;font-size:1.1rem}.pagination .top{color:#555;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:1.1rem;opacity:.6}.pagination .top:hover{opacity:1}.pagination .arrow{color:#555;position:absolute}.pagination .arrow:hover,.pagination .arrow:focus{opacity:.6;text-decoration:none}.pagination .left{left:0}.pagination .right{right:0}@media(prefers-color-scheme:dark){.pagination span{color:#ccc}.pagination .top{color:#ddd}.pagination .arrow{color:#ddd}}.catalogue-item{border-bottom:1px solid #e5e5e5;display:block;padding:2rem 0}.catalogue-item:hover .catalogue-line,.catalogue-item:focus .catalogue-line{width:5rem}.catalogue-item:last-child{border:0}.catalogue-item a.entry{color:#555}.catalogue-time{color:#aaa;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;letter-spacing:.5px}.catalogue-title{color:#353535;display:block;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:1.6rem;font-weight:700;margin:.5rem 0}@media(min-width:600px){.catalogue-title{font-size:1.8rem}}.catalogue-line{border-top:.2rem solid #353535;display:block;width:2rem}.catalogue p{margin-bottom:.25rem}.catalogue .tags{display:flex;justify-content:flex-end}.catalogue.archive{margin-bottom:.25rem}.catalogue.archive article{box-sizing:border-box;display:flex;justify-content:space-between}@media(prefers-color-scheme:dark){.catalogue-item a.entry{color:#eee}.catalogue-title{color:#ddd}}</style>
+<link rel=icon type=image/png sizes=32x32 href=/images/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/images/favicon-16x16.png>
+<link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png>
+<link href rel=alternate type=application/rss+xml title="Kristoffer Lind - Developer, Technologist, Blogger">
+<script async type=text/javascript src=https://www.lind.sh/js/index.79b056912be7157f2501588e9a504af685b2c5e0f50a84a4699aedebeec5a92b27ceccb62d381eaa7f263026fa2836d5628e85f5478b70da6a9c7f2648c5344d.js integrity="sha512-ebBWkSvnFX8lAViOmlBK9oWyxeD1CoSkaZrt6+7FqSsnzsy2LTgeqn8mMCb6KDbVYo6F9UeLcNpqnH8mSMU0TQ=="></script>
+</head>
+<body>
+<nav class=nav>
+<div class=nav-container>
+<a href=/>
+<h2 class=nav-title>Kristoffer Lind</h2>
+</a>
+<ul>
+<li>
+<a href=/about/>
+<span>Who am I?</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<main>
+<div class=post>
+<div class=post-info>
+<span>Written by</span>
+Kristoffer Lind
+<br>
+<span>on&nbsp;</span><time datetime="November 21, 2021">November 21, 2021</time>
+</div>
+<h1 class=post-title>Hugo performance optimizations</h1>
+<div class=post-line></div>
+<p>To have a silky smooth start you&rsquo;ll need any code that affects layout to be included in the first render. Ideally you should fit all HTML and CSS needed by first render within 14KB (search for TCP slow start to dig deeper). Size of images needs to be predetermined so that rendering them won&rsquo;t affect layout. There shouldn&rsquo;t be any JS that affect layout either.</p>
+<h1 id=user-firstcontent-first>
+<a href=#user-firstcontent-first class=heading>User first/Content first</a>
+</h1>
+<p>The reason users come to your site is to consume your content (read your posts, buy your product or whatever). Content is what matters, delivering it should be your primary focus. Your users should be able to start consuming your content as soon as possible, any other priorities about design or analytics are at most secondary. You can make it gradually more beautiful or add functionality. But you should not be disturbing your users when doing so.</p>
+<h1 id=experience-your-site-in-bad-conditions>
+<a href=#experience-your-site-in-bad-conditions class=heading>Experience your site in bad conditions</a>
+</h1>
+<p>Both Firefox and Chrome have throttling options in the network tab, try setting it to 3G or 4G, whichever is the likely worst condition for your users. Do you feel like ripping your hair out? This is the experience some of your users is going to have.</p>
+<h1 id=css-optimizations>
+<a href=#css-optimizations class=heading>CSS optimizations</a>
+</h1>
+<p>If your CSS is somewhat slim you can either inline it or utilize server push with a resource hint. If you have lots of CSS you might also want to look into splitting it in modules based on what&rsquo;s needed for different pages and possibly critical/non-critical CSS. Another and perhaps better alternative is to reduce it&rsquo;s size. The size and complexity of your stylesheet also affects parse and render time.</p>
+<h2 id=inline-css>
+<a href=#inline-css class=heading>Inline CSS</a>
+</h2>
+<p>Main downside of this approach is caching, it&rsquo;s all going to be downloaded for every single page. On the other hand it&rsquo;s going to work for all browsers and servers. For small CSS files the reduced network overhead, reduced amount of HTML and simplicity makes this the better option. If you can fit both the CSS and a some content within the first TCP roundtrip (14 KB), I think this is the better approach.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go-html-template data-lang=go-html-template>&lt;<span style=color:#f92672>head</span>&gt;
+  <span style=color:#75715e>{{-</span> <span style=color:#a6e22e>$styleOptions</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>dict</span> <span style=color:#e6db74>&#34;outputStyle&#34;</span> <span style=color:#e6db74>&#34;compressed&#34;</span> <span style=color:#75715e>}}</span>
+  <span style=color:#75715e>{{-</span> <span style=color:#a6e22e>$style</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>resources</span><span style=color:#a6e22e>.Get</span> <span style=color:#e6db74>&#34;scss/tale.scss&#34;</span> <span style=color:#f92672>|</span> <span style=color:#a6e22e>resources</span><span style=color:#a6e22e>.ToCSS</span> <span style=color:#a6e22e>$styleOptions</span> <span style=color:#75715e>}}</span>
+  &lt;<span style=color:#f92672>style</span>&gt;<span style=color:#75715e>{{</span> <span style=color:#a6e22e>$style</span><span style=color:#a6e22e>.Content</span> <span style=color:#f92672>|</span> <span style=color:#a6e22e>safeCSS</span> <span style=color:#75715e>}}</span>&lt;/<span style=color:#f92672>style</span>&gt;
+&lt;/<span style=color:#f92672>head</span>&gt;
+</code></pre></div><h2 id=resource-hint>
+<a href=#resource-hint class=heading>Resource hint</a>
+</h2>
+<p>This approach relies on the server to pick up on the hint and utilize it to trigger push. The browser also needs to support HTTP/2 and accept the push. The server is going to push that resource for every single page so the difference in bandwidth used on the server end is negligible, but the browser can reject it.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go-html-template data-lang=go-html-template>&lt;<span style=color:#f92672>head</span>&gt;
+  <span style=color:#75715e>{{-</span> <span style=color:#a6e22e>$styleOptions</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>dict</span> <span style=color:#e6db74>&#34;outputStyle&#34;</span> <span style=color:#e6db74>&#34;compressed&#34;</span> <span style=color:#75715e>}}</span>
+  <span style=color:#75715e>{{-</span> <span style=color:#a6e22e>$style</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>resources</span><span style=color:#a6e22e>.Get</span> <span style=color:#e6db74>&#34;scss/tale.scss&#34;</span> <span style=color:#f92672>|</span> <span style=color:#a6e22e>resources</span><span style=color:#a6e22e>.ToCSS</span> <span style=color:#a6e22e>$styleOptions</span> <span style=color:#75715e>}}</span>
+  &lt;<span style=color:#f92672>link</span> <span style=color:#a6e22e>rel</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;preload&#34;</span> <span style=color:#a6e22e>as</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;style&#34;</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#75715e>{{</span><span style=color:#a6e22e>$style</span><span style=color:#a6e22e>.Permalink</span><span style=color:#75715e>}}</span><span style=color:#e6db74>&#34;</span>&gt;
+  &lt;<span style=color:#f92672>link</span> <span style=color:#a6e22e>rel</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;stylesheet&#34;</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#75715e>{{</span><span style=color:#a6e22e>$style</span><span style=color:#a6e22e>.Permalink</span><span style=color:#75715e>}}</span><span style=color:#e6db74>&#34;</span> /&gt;
+&lt;/<span style=color:#f92672>head</span>&gt;
+</code></pre></div><h2 id=splitting-into-parts>
+<a href=#splitting-into-parts class=heading>Splitting into parts</a>
+</h2>
+<p>In a component based approach you&rsquo;d define the css per component and supply the CSS along with each component, separated into bundles with code splitting. With Hugo this is likely not an option. What you can do however is to split it per page type. You don&rsquo;t need the post css for the listing for example.</p>
+<p>Separate the bundles in a way that does not duplicate, place shared rules in one bundle that is included for all pages and then page specific bundles that are also included for those pages.</p>
+<h2 id=critical-css>
+<a href=#critical-css class=heading>Critical CSS</a>
+</h2>
+<p>First off, consider if splitting into parts isn&rsquo;t a better option. Critical CSS differs per page, window size and zoom/scale. It&rsquo;s really hard to get it right for all cases. It can be used as an automated way of splitting into parts (set size to render full page to get all CSS used in that page). Is it worth the complexity though?</p>
+<p>Critical CSS is the CSS needed for initial render, anything that can be seen before scrolling or any other interaction. You can inspect it using Chrome&rsquo;s coverage tool (settings -> more tools -> coverage). For this page the first thought would be the footer, but some of the pages aren&rsquo;t long enough for the footer to always end up outside the view. Especially if desktop screens in portrait orientation are taken into consideration.</p>
+<p>A common option for getting critical CSS right is to have it in mind for the design, avoiding the guesswork by trying to always show the same content first, you&rsquo;ll then also know that only that part needs to be included as critical css. Often this hides all content except the title or something similar though, which is likely a disservice to the user, who now has to interact with the page to see anything other than the title. It does buy you the time of however long it takes the user to finish reading the title and move on. But it also makes the TTI (time to interactive) metric more important.</p>
+<p>Again, you probably shouldn&rsquo;t, but there are tools to generate it (<a href=https://github.com/pocketjoso/penthouse rel=noopener>penthouse</a> is an alternative).</p>
+<h1 id=javascript-optimizations>
+<a href=#javascript-optimizations class=heading>Javascript optimizations</a>
+</h1>
+<p>By default scripts will block rendering until they are downloaded, parsed and executed. Being aware of the alternatives allow you to move away from the defaults and reap some benefits for your users. Ideally, any scripts should be progressive enhancements. It can for example be used to fetch/render next page on likely click intent (hovering for a while).</p>
+<h2 id=render-blocking>
+<a href=#render-blocking class=heading>Render blocking</a>
+</h2>
+<p>For advanced applications you&rsquo;ll need to differentiate which parts need to be blocking, sort of like with css above, you might have critical javascript. For a static site such as one generated with Hugo I have a hard time coming up with cases that needs to be render blocking though.</p>
+<p>If you need to support really old browsers you can delay render blocking until as much content has been rendered as possible by placing your scripts last in the body tag. Nowadays though all you need to do is add an attribute to your script tags and make sure there are no inline scripts.</p>
+<p>There are two attributes to choose from: <code>defer</code> or <code>async</code>. If you need to preserve the order in which the scripts execute or need them to execute after DOM ready and before DOMContentLoaded you should use <code>defer</code>. If the script is completely independent, where neither which order they execute in or when that happens matters (other than last), you should pick <code>async</code>. You likely built a bundle which should mean execution order isn&rsquo;t a factor and it shouldn&rsquo;t be messing with your content, so here&rsquo;s an example with async:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go-html-template data-lang=go-html-template>&lt;<span style=color:#f92672>head</span>&gt;
+  <span style=color:#75715e>{{-</span> <span style=color:#a6e22e>$jsServerOptions</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>dict</span> <span style=color:#e6db74>&#34;minify&#34;</span> <span style=color:#66d9ef>false</span> <span style=color:#75715e>}}</span>
+  <span style=color:#75715e>{{-</span> <span style=color:#a6e22e>$jsBuildOptions</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>dict</span> <span style=color:#e6db74>&#34;minify&#34;</span> <span style=color:#66d9ef>true</span> <span style=color:#e6db74>&#34;target&#34;</span> <span style=color:#e6db74>&#34;es2015&#34;</span> <span style=color:#75715e>}}</span>
+  <span style=color:#75715e>{{-</span> <span style=color:#a6e22e>$jsOptions</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>cond</span> <span style=color:#f92672>(</span><span style=color:#a6e22e>.Site.IsServer</span><span style=color:#f92672>)</span> <span style=color:#a6e22e>$jsServerOptions</span> <span style=color:#a6e22e>$jsBuildOptions</span> <span style=color:#75715e>}}</span>
+  <span style=color:#75715e>{{-</span> <span style=color:#a6e22e>$js</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>resources</span><span style=color:#a6e22e>.Get</span> <span style=color:#e6db74>&#34;js/index.js&#34;</span> <span style=color:#f92672>|</span> <span style=color:#66d9ef>js</span><span style=color:#a6e22e>.Build</span> <span style=color:#a6e22e>$jsOptions</span> <span style=color:#75715e>}}</span>
+  &lt;<span style=color:#f92672>script</span> <span style=color:#a6e22e>async</span> <span style=color:#a6e22e>type</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;text/javascript&#34;</span> <span style=color:#a6e22e>src</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#75715e>{{</span> <span style=color:#a6e22e>$js</span><span style=color:#a6e22e>.Permalink</span> <span style=color:#75715e>}}</span><span style=color:#e6db74>&#34;</span>&gt;&lt;/<span style=color:#f92672>script</span>&gt;
+&lt;/<span style=color:#f92672>head</span>&gt;
+</code></pre></div><p>This example includes conditionally minifying it based on whether it&rsquo;s a build or running in watch mode. It&rsquo;s hard to debug minified js, for css it doesn&rsquo;t matter because you&rsquo;re pretty much never looking at the rendered stylesheet anyway. Always minifying and including sourcemaps is a better approach since it increases the chances of the minified code to have been tested.</p>
+<p>You should also include a hash of the content in the filename so that you can set more aggressive cache rules. It can be accomplished like this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go-html-template data-lang=go-html-template><span style=color:#75715e>{{-</span> <span style=color:#a6e22e>$jsWithHash</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>$js</span> <span style=color:#f92672>|</span> <span style=color:#a6e22e>resources</span><span style=color:#a6e22e>.Fingerprint</span> <span style=color:#e6db74>&#34;sha512&#34;</span> <span style=color:#75715e>-}}</span>
+</code></pre></div><p>Fingerprint can also be used to configure SRI (subresource integrity) using the integrity attribute of the script tag. It&rsquo;s not likely to help much for local resources (if they can replace that they can replace the html file with the integrity check too), but its important for external resources.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go-html-template data-lang=go-html-template>&lt;<span style=color:#f92672>script</span> <span style=color:#a6e22e>integrity</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#75715e>{{</span> <span style=color:#a6e22e>$jsWithHash</span><span style=color:#a6e22e>.Data.Integrity</span> <span style=color:#75715e>}}</span><span style=color:#e6db74>&#34;</span>&gt;&lt;/<span style=color:#f92672>script</span>&gt;
+</code></pre></div><h2 id=fetchrender-earlier>
+<a href=#fetchrender-earlier class=heading>Fetch/render earlier</a>
+</h2>
+<p>The general idea is to prepare upcoming content beforehand so that the user spends less time waiting for it. You can do this by configuring prefetch/prerender hints, a really naive approach would be to just add prefetch hints to all linked content in lists for example. This would be quite wasteful though as the user is likely to pick one and proceed from there.</p>
+<p>Gatsby had a feature where it would prefetch on hover, which I wanted to have here too. It was a bit excessive with downloads as it did it right away, I wanted the click to seem a bit more likely before prefetching. I also wanted to try prerender which will only be done for one resource, so there it needed to be even more likely before firing it.</p>
+<p>Basing the likelihood of a click on how long the user would hover over the link before prefetching/prerendering seemed like a good option.</p>
+<h3 id=click-intent>
+<a href=#click-intent class=heading>Click intent</a>
+</h3>
+<p>This is pretty straightforward, start timeout for executing the action on mouseenter, cancel on mouseleave and fire the action if the user kept hovering for the set amount of time. Disable after first execution.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>onClickIntent</span>(<span style=color:#a6e22e>element</span>, <span style=color:#a6e22e>hoverTime</span>, <span style=color:#a6e22e>callback</span>) {
+  <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>timer</span>;
+
+  <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>disable</span>() {
+    <span style=color:#a6e22e>element</span>.<span style=color:#a6e22e>removeEventListener</span>(<span style=color:#e6db74>&#39;mouseenter&#39;</span>, <span style=color:#a6e22e>start</span>);
+    <span style=color:#a6e22e>element</span>.<span style=color:#a6e22e>removeEventListener</span>(<span style=color:#e6db74>&#39;mouseleave&#39;</span>, <span style=color:#a6e22e>cancel</span>);
+  }
+
+  <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>fire</span>() {
+    <span style=color:#a6e22e>callback</span>(<span style=color:#a6e22e>element</span>);
+    <span style=color:#a6e22e>disable</span>();
+  }
+
+  <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>cancel</span>() {
+    <span style=color:#a6e22e>clearTimeout</span>(<span style=color:#a6e22e>timer</span>);
+    <span style=color:#a6e22e>timer</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>null</span>;
+  }
+
+  <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>start</span>() {
+    <span style=color:#a6e22e>timer</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>setTimeout</span>(<span style=color:#a6e22e>fire</span>, <span style=color:#a6e22e>hoverTime</span>);
+  }
+
+  <span style=color:#a6e22e>element</span>.<span style=color:#a6e22e>addEventListener</span>(<span style=color:#e6db74>&#39;mouseenter&#39;</span>, <span style=color:#a6e22e>start</span>);
+  <span style=color:#a6e22e>element</span>.<span style=color:#a6e22e>addEventListener</span>(<span style=color:#e6db74>&#39;mouseleave&#39;</span>, <span style=color:#a6e22e>cancel</span>);
+}
+</code></pre></div><h3 id=create-prefetch-hints>
+<a href=#create-prefetch-hints class=heading>Create prefetch hints</a>
+</h3>
+<p>Hints are configured using link tags in head, like this: <code>&lt;link rel="prefetch" href="/some/path" /></code>. A page can have multiple prefetch hints and one prerender hint.</p>
+<p>This part just hooks up a create hint method with the click intent. If the user hovers a link for 150ms, create a prefetch hint for that resource.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>existingHints</span> <span style=color:#f92672>=</span> [];
+
+<span style=color:#66d9ef>function</span> <span style=color:#a6e22e>createHintHooks</span>(<span style=color:#a6e22e>element</span>) {
+  <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>hint</span>;
+
+  <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>createPrefetchHint</span>() {
+    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>href</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>element</span>.<span style=color:#a6e22e>getAttribute</span>(<span style=color:#e6db74>&#39;href&#39;</span>)
+    <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>existingHints</span>.<span style=color:#a6e22e>includes</span>(<span style=color:#a6e22e>href</span>)) {
+      <span style=color:#a6e22e>hint</span> <span style=color:#f92672>=</span> document.<span style=color:#a6e22e>createElement</span>(<span style=color:#e6db74>&#39;link&#39;</span>);
+      <span style=color:#a6e22e>hint</span>.<span style=color:#a6e22e>setAttribute</span>(<span style=color:#e6db74>&#39;rel&#39;</span>, <span style=color:#e6db74>&#39;prefetch&#39;</span>);
+      <span style=color:#a6e22e>hint</span>.<span style=color:#a6e22e>setAttribute</span>(<span style=color:#e6db74>&#39;href&#39;</span>, <span style=color:#a6e22e>href</span>);
+      document.<span style=color:#a6e22e>head</span>.<span style=color:#a6e22e>appendChild</span>(<span style=color:#a6e22e>hint</span>);
+      <span style=color:#a6e22e>existingHints</span>.<span style=color:#a6e22e>push</span>(<span style=color:#a6e22e>href</span>);
+    }
+  }
+
+  <span style=color:#a6e22e>onClickIntent</span>(<span style=color:#a6e22e>element</span>, <span style=color:#ae81ff>150</span>, <span style=color:#a6e22e>createPrefetchHint</span>);
+}
+
+</code></pre></div><p>The events can then be hooked up by finding all links and executing the create hints method for them like this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js>document.<span style=color:#a6e22e>querySelectorAll</span>(<span style=color:#e6db74>&#39;a&#39;</span>).<span style=color:#a6e22e>forEach</span>(<span style=color:#a6e22e>createHintHooks</span>);
+</code></pre></div><h3 id=including-prerender>
+<a href=#including-prerender class=heading>Including prerender</a>
+</h3>
+<p>For the prerender hint, replace the rel attribute on the existing hint.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>onClickIntent</span>(<span style=color:#a6e22e>element</span>, <span style=color:#a6e22e>hoverTime</span>, <span style=color:#a6e22e>callback</span>) {
+  <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>timer</span>;
+
+  <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>disable</span>() {
+    <span style=color:#a6e22e>element</span>.<span style=color:#a6e22e>removeEventListener</span>(<span style=color:#e6db74>&#39;mouseenter&#39;</span>, <span style=color:#a6e22e>start</span>);
+    <span style=color:#a6e22e>element</span>.<span style=color:#a6e22e>removeEventListener</span>(<span style=color:#e6db74>&#39;mouseleave&#39;</span>, <span style=color:#a6e22e>cancel</span>);
+  }
+
+  <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>fire</span>() {
+    <span style=color:#a6e22e>callback</span>(<span style=color:#a6e22e>element</span>);
+    <span style=color:#a6e22e>disable</span>();
+  }
+
+  <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>cancel</span>() {
+    <span style=color:#a6e22e>clearTimeout</span>(<span style=color:#a6e22e>timer</span>);
+    <span style=color:#a6e22e>timer</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>null</span>;
+  }
+
+  <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>start</span>() {
+    <span style=color:#a6e22e>timer</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>setTimeout</span>(<span style=color:#a6e22e>fire</span>, <span style=color:#a6e22e>hoverTime</span>);
+  }
+
+  <span style=color:#a6e22e>element</span>.<span style=color:#a6e22e>addEventListener</span>(<span style=color:#e6db74>&#39;mouseenter&#39;</span>, <span style=color:#a6e22e>start</span>);
+  <span style=color:#a6e22e>element</span>.<span style=color:#a6e22e>addEventListener</span>(<span style=color:#e6db74>&#39;mouseleave&#39;</span>, <span style=color:#a6e22e>cancel</span>);
+}
+
+<span style=color:#66d9ef>let</span> <span style=color:#a6e22e>hasPrerenderHint</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>false</span>;
+<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>existingHints</span> <span style=color:#f92672>=</span> [];
+
+<span style=color:#66d9ef>function</span> <span style=color:#a6e22e>createHintHooks</span>(<span style=color:#a6e22e>element</span>) {
+  <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>hint</span>;
+
+  <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>createPrefetchHint</span>() {
+    <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>href</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>element</span>.<span style=color:#a6e22e>getAttribute</span>(<span style=color:#e6db74>&#39;href&#39;</span>)
+    <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>existingHints</span>.<span style=color:#a6e22e>includes</span>(<span style=color:#a6e22e>href</span>)) {
+      <span style=color:#a6e22e>hint</span> <span style=color:#f92672>=</span> document.<span style=color:#a6e22e>createElement</span>(<span style=color:#e6db74>&#39;link&#39;</span>);
+      <span style=color:#a6e22e>hint</span>.<span style=color:#a6e22e>setAttribute</span>(<span style=color:#e6db74>&#39;rel&#39;</span>, <span style=color:#e6db74>&#39;prefetch&#39;</span>);
+      <span style=color:#a6e22e>hint</span>.<span style=color:#a6e22e>setAttribute</span>(<span style=color:#e6db74>&#39;href&#39;</span>, <span style=color:#a6e22e>href</span>);
+      document.<span style=color:#a6e22e>head</span>.<span style=color:#a6e22e>appendChild</span>(<span style=color:#a6e22e>hint</span>);
+      <span style=color:#a6e22e>existingHints</span>.<span style=color:#a6e22e>push</span>(<span style=color:#a6e22e>href</span>);
+    }
+  }
+
+  <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>createPrerenderHint</span>() {
+    <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>hasPrerenderHint</span>) {
+      <span style=color:#a6e22e>hint</span>.<span style=color:#a6e22e>setAttribute</span>(<span style=color:#e6db74>&#39;rel&#39;</span>, <span style=color:#e6db74>&#39;prerender&#39;</span>);
+      <span style=color:#a6e22e>hasPrerenderHint</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>;
+    }
+  }
+
+  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>isInternalLink</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>element</span>.<span style=color:#a6e22e>href</span>.<span style=color:#a6e22e>includes</span>(window.<span style=color:#a6e22e>location</span>.<span style=color:#a6e22e>host</span>);
+
+  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>isInternalLink</span>) {
+    <span style=color:#a6e22e>onClickIntent</span>(<span style=color:#a6e22e>element</span>, <span style=color:#ae81ff>150</span>, <span style=color:#a6e22e>createPrefetchHint</span>);
+    <span style=color:#a6e22e>onClickIntent</span>(<span style=color:#a6e22e>element</span>, <span style=color:#ae81ff>1000</span>, <span style=color:#a6e22e>createPrerenderHint</span>);
+  }
+}
+
+document.<span style=color:#a6e22e>querySelectorAll</span>(<span style=color:#e6db74>&#39;a&#39;</span>).<span style=color:#a6e22e>forEach</span>(<span style=color:#a6e22e>createHintHooks</span>);
+</code></pre></div><h3 id=conclusions>
+<a href=#conclusions class=heading>Conclusions</a>
+</h3>
+<p>According to caniuse prefetch should work for most browsers and prerender support is a bit worse. Firefox on linux (at least I don&rsquo;t think I&rsquo;ve changed the setting) appear to default to the feature being turned off. I don&rsquo;t think any of the browsers actually prerender, but they do prefetch both the page and it&rsquo;s resources.</p>
+<p>Taking this a step further we could actually just fetch the page, place it outside the view and then move it into the view, remove the old content and update the location on click. Could be very lightweight and would bring most of the good parts of a SPA (single page application), with pretty much none of it&rsquo;s bad parts.</p>
+<h2 id=get-rid-of-bloat>
+<a href=#get-rid-of-bloat class=heading>Get rid of bloat</a>
+</h2>
+<p>This is kind of obvious, but get rid of stuff you don&rsquo;t need. It was also my main frustration with my previous setup using Gatsby, 340 KB of javascript to be downloaded, parsed and executed. Of which the only feature to have any value is fetching links on hover (and it does so rather naively too). You can read about the previous setup in <a href=/blog/getting-a-blog-the-hard-way>Getting a blog the hard way</a></p>
+<h2 id=javascript-libraries>
+<a href=#javascript-libraries class=heading>Javascript libraries</a>
+</h2>
+<p>For a simple static site you probably don&rsquo;t need any libraries. Probably no javascript at all even. It&rsquo;s not a stretch to call the prefetch script above silly. Hugo doesn&rsquo;t seem like a great platform for an advanced application, consider switching to some other setup if that&rsquo;s what you&rsquo;re doing.</p>
+<p>Any time you&rsquo;re thinking of adding a dependency, pause and consider. What would it do for you? What&rsquo;s the cost? How long would a specialized version take?</p>
+<p>Cost is the hard part, that new dependency is an attack vector, what could a malicious actor do with it? what&rsquo;s the risk of that happening? what&rsquo;s the size of it compared to doing it yourself? Should you review it every time it&rsquo;s updated? How isolated is that dependency from your other code? How much work would it be to replace it? What&rsquo;s the maintenance cost compared to maintaining your own solution?</p>
+<p>The cost in terms of time taken to write it yourself is apparent, many other factors are often overlooked. People skipping all of them is the only answer I can think of as to why all these 1-10 loc (lines of code) packages exist. A more selfish reason is that it&rsquo;s better for your career (at least long-term) to dig in and learn. Don&rsquo;t know how to do an is-even (yes, there&rsquo;s an npm package for that.. and it depends on the is-odd package) check? Fine, search for it, look for solutions, understand them and then implement it or consider the rest of the implications and pull it in, now that version of the dependency is reviewed at least (if you trust that what you looked at is actually what you&rsquo;ll be installing).</p>
+<p>Be mindful of your dependencies.</p>
+<h3 id=history>
+<a href=#history class=heading>History</a>
+</h3>
+<p>In 2016 there was a minor crisis because leftpad (padding left side of strings) was taken off of the package registry. Prime example of a library nobody should&rsquo;ve installed, not because of the crisis, but because of the problem it solved. But it had millions of downloads and broke thousands of projects.</p>
+<p>In 2021 we had ua-parser-js, which if you actually need much of the information it figures out is something that would actually save you countless hours. I don&rsquo;t like the fact that people do, but I get why it exists. Malicious versions of it were published to the npm registry and stole keys, cookies and passwords from anyone who installed it. We often have code review processes in place for any changes done by colleagues. But we blindly trust random people on the internet because it&rsquo;s in a package? I think we &ldquo;choose&rdquo; to trust them because it&rsquo;s overwhelming.</p>
+</div>
+<div class=pagination>
+<a href=# class=top>Top</a>
+</div>
+</main>
+<footer>
+<span>
+&copy; <time datetime="2023-11-21 20:29:13.252789956 +0000 UTC m=+0.108775009">2023</time> Kristoffer Lind. Made with <a href=https://gohugo.io rel=noopener>Hugo</a> using the <a href=https://github.com/kristofferlind/tale-hugo/ rel=noopener>Tale</a> theme.
+</span>
+</footer>
+</body>
+</html>

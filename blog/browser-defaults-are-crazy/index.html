@@ -1,0 +1,135 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Browser defaults are crazy &#183; Kristoffer Lind - Developer, Technologist, Blogger</title>
+<meta name=description content="Browsers default to allowing js and communication with everything that is accessible from your machine, I think that's crazy and the source of quite a lot of issues with the web. Here's some pointers on why and what you can do about it.">
+<link rel=canonical href=/blog/browser-defaults-are-crazy/>
+<style>*{line-height:1.5}html,body{color:#555;background-color:#fff;margin:0;padding:0}html{font-family:times new roman,Times,serif;font-size:14px;overflow-y:scroll}@media(min-width:600px){html{font-size:18px}}h1,h2,h3,h4,h5,h6,.heading{color:#353535;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;line-height:normal}a{color:#4a9ae1;text-decoration:none}blockquote{border-left:.25rem solid #e5e5e5;color:#979797;margin:.8rem 0;padding:.5rem 1rem}blockquote p:last-child{margin-bottom:0}@media(min-width:600px){blockquote{padding:0 5rem 0 1.25rem}}img{display:block;margin:0 0 1rem;max-width:100%;object-fit:scale-down}td{vertical-align:top}@media(prefers-color-scheme:dark){html,body{background-color:#333;color:#ddd}h1,h2,h3,h4,h5,h6,.heading{color:#ccc}blockquote{color:#979797}}.highlight pre{padding:1rem;border-radius:3px;overflow-x:auto;font-size:.8rem}.post{padding:3rem 0}.post-info{color:#aaa;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;letter-spacing:.5px;text-align:center}.post-info span{font-style:italic}.post-title{color:#353535;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:2rem;margin:1rem 0;text-align:center}@media(min-width:600px){.post-title{font-size:3rem}}.post-line{border-top:.4rem solid #353535;display:block;margin:0 auto 3rem;width:4rem}.post p{margin:0 0 1rem;text-align:justify}.post a:hover{text-decoration:underline}.post img{margin:0 auto .5rem}.post img+em{color:#aaa;display:block;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:.9rem;font-style:normal;text-align:center}@media(prefers-color-scheme:dark){.post-info{color:#ccc}.post-title{color:#eee}.post img+em{color:#ccc}}.container{margin:0 auto;max-width:800px;width:80%}main,footer,.nav-container{display:block;margin:0 auto;max-width:800px;width:80%}.nav{box-shadow:0 2px 2px -2px rgba(0,0,0,.2);overflow:auto}.nav-container{margin:1rem auto;position:relative;text-align:center}.nav-title{color:#555;display:inline-block;margin:0;padding-right:.2rem}.nav-title:hover,.nav-title:focus{opacity:.6}.nav ul{list-style-type:none;margin:1rem 0 0;padding:0;text-align:center}.nav li{color:#555;display:inline-block;opacity:.6;padding:0 2rem 0 0}.nav li:last-child{padding-right:0}.nav li:hover,.nav li:focus{opacity:1}.nav a{color:#555;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif}@media(min-width:600px){.nav-container{text-align:left}.nav ul{bottom:0;position:absolute;right:0}}footer{font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;padding:2rem 0;text-align:center}footer span{color:#555;font-size:.8rem}@media(prefers-color-scheme:dark){.nav{box-shadow:0 2px 2px -2px rgba(255,255,255,.2)}.nav-title{color:#ddd}.nav li{color:#ddd}.nav a{color:#ddd}footer span{color:#ddd}}.pagination{border-top:.5px solid #e5e5e5;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;padding-top:2rem;position:relative;text-align:center}.pagination span{color:#353535;font-size:1.1rem}.pagination .top{color:#555;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:1.1rem;opacity:.6}.pagination .top:hover{opacity:1}.pagination .arrow{color:#555;position:absolute}.pagination .arrow:hover,.pagination .arrow:focus{opacity:.6;text-decoration:none}.pagination .left{left:0}.pagination .right{right:0}@media(prefers-color-scheme:dark){.pagination span{color:#ccc}.pagination .top{color:#ddd}.pagination .arrow{color:#ddd}}.catalogue-item{border-bottom:1px solid #e5e5e5;display:block;padding:2rem 0}.catalogue-item:hover .catalogue-line,.catalogue-item:focus .catalogue-line{width:5rem}.catalogue-item:last-child{border:0}.catalogue-item a.entry{color:#555}.catalogue-time{color:#aaa;font-family:Palatino,palatino lt std,palatino linotype,book antiqua,georgia,serif;letter-spacing:.5px}.catalogue-title{color:#353535;display:block;font-family:helvetica neue,segoe ui,Helvetica,Arial,sans-serif;font-size:1.6rem;font-weight:700;margin:.5rem 0}@media(min-width:600px){.catalogue-title{font-size:1.8rem}}.catalogue-line{border-top:.2rem solid #353535;display:block;width:2rem}.catalogue p{margin-bottom:.25rem}.catalogue .tags{display:flex;justify-content:flex-end}.catalogue.archive{margin-bottom:.25rem}.catalogue.archive article{box-sizing:border-box;display:flex;justify-content:space-between}@media(prefers-color-scheme:dark){.catalogue-item a.entry{color:#eee}.catalogue-title{color:#ddd}}</style>
+<link rel=icon type=image/png sizes=32x32 href=/images/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/images/favicon-16x16.png>
+<link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png>
+<link href rel=alternate type=application/rss+xml title="Kristoffer Lind - Developer, Technologist, Blogger">
+<script async type=text/javascript src=https://www.lind.sh/js/index.79b056912be7157f2501588e9a504af685b2c5e0f50a84a4699aedebeec5a92b27ceccb62d381eaa7f263026fa2836d5628e85f5478b70da6a9c7f2648c5344d.js integrity="sha512-ebBWkSvnFX8lAViOmlBK9oWyxeD1CoSkaZrt6+7FqSsnzsy2LTgeqn8mMCb6KDbVYo6F9UeLcNpqnH8mSMU0TQ=="></script>
+</head>
+<body>
+<nav class=nav>
+<div class=nav-container>
+<a href=/>
+<h2 class=nav-title>Kristoffer Lind</h2>
+</a>
+<ul>
+<li>
+<a href=/about/>
+<span>Who am I?</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<main>
+<div class=post>
+<div class=post-info>
+<span>Written by</span>
+Kristoffer Lind
+<br>
+<span>on&nbsp;</span><time datetime="November 9, 2023">November 9, 2023</time>
+</div>
+<h1 class=post-title>Browser defaults are crazy</h1>
+<div class=post-line></div>
+<p>
+<script>document.write("Thank you for entrusting me with all these powers, was it a conscious decision? Let me explain why I think those defaults are bad and what you can do about it.")</script>
+<noscript>
+Well done, this site works just fine without javascript, being conscious about when to allow it means you are a lot less susceptible to all of the things mentioned below.
+</noscript>
+</p>
+<p>I could use you as a bot to assault web services I dislike, utilize some of your compute to calculate stuff I&rsquo;m interested in or mine cryptocurrencies. I could use it to gather enough information about you that I can recognize you from a different browser or private mode. I could run P2P (peer to peer) software to have you help serve content I want to spread. Oh and how nice of you to leave this tab open for a while before you had time to read it, right?</p>
+<p>What can be done with it is beautiful, it allows us to build really interesting stuff to publish as web apps that require no installation, with most of the capabilities of a natively installed app. Beautiful things like end to end encrypted decentralized applications that are kept running because people want to use them, where as a user you&rsquo;re part of the system, own your content and who to share it with.</p>
+<p>Most of the time it&rsquo;s used rather wastefully from a user perspective though and the fact that we default to allowing it is insane. We should be giving away that power on a per-domain or per-subdomain basis, where reasonable.</p>
+<p>I&rsquo;m thinking the considerations should look something like this:</p>
+<ul>
+<li>A game, I can see how its needs are a bit different and I don&rsquo;t do banking or other sensitive tasks on this device/compartment.</li>
+<li>An article and the screen is blank without it, I&rsquo;d rather just look for the information somewhere else than trust this random person.</li>
+<li>A collaborative drawing tool?, that&rsquo;s interactivity sort of on par with a game, seems like a reasonable request, should I trust whoever made it? on this device/compartment?</li>
+</ul>
+<p>The main part of it is that we allow JavaScript by default, but it&rsquo;s also about the fact that it&rsquo;s not isolated to the domain you&rsquo;re visiting. I would only be able to attack my host and your machine if it was isolated to this domain. With current defaults though I can attack anything that is accessible from your machine and all of it is also available for help with an attack on you.</p>
+<h2 id=digging-a-bit-deeper>
+<a href=#digging-a-bit-deeper class=heading>Digging a bit deeper</a>
+</h2>
+<p>This section goes a bit deeper on the problems with these defaults. You can scroll past it if you just want to see suggestions for improvement.</p>
+<h3 id=ephemeral-bot-network>
+<a href=#ephemeral-bot-network class=heading>Ephemeral bot network</a>
+</h3>
+<p>While having a browser tab of a web service open, you could be part of what&rsquo;s effectively an ephemeral bot network, the site in question is the command server instructing you what to do. Each visitor is an ephemeral bot of that network that can be utilized for compute power, network diversity and bandwidth. It can also be a bit more targeted, utilizing network access given to those particular machines or other web services those clients are authorized in. It can also be used for mass content creation like reviews from seemingly random users.</p>
+<p>You might be thinking that it&rsquo;s only a problem if visiting shady places, but if you consider the monetization perspective that doesn&rsquo;t make sense. Most attacks are more likely to be designed to be as broad as possible, utilizing automation. Malicious actors are continuously scanning the web for vulnerable services, some of which are attacked right away while others are likely classified as potentially juicy or just don&rsquo;t have an attack strategy implemented yet and are saved for later use. Now that tab you&rsquo;ve left open for a menu of the local restaurant might be making you part of such a bot network.</p>
+<h4 id=compute>
+<a href=#compute class=heading>Compute</a>
+</h4>
+<p>With access to WebAssembly and WebGPU this distributed compute power can be utilized pretty efficiently. Some cryptocurrencies are also moving towards making specialized mining hardware less efficient. One approach for monetizing such a network could therefore be to utilize it for mining cryptocurrencies.</p>
+<h4 id=attack-platform>
+<a href=#attack-platform class=heading>Attack platform</a>
+</h4>
+<p>The network diversity/bandwidth could be utilized for a DDOS (distributed denial of service) attack. Such an attack could be made very hard to distinguish from regular use.</p>
+<p>Network access given to those particular clients could also be utilized as a stepping stone to gather information from or attack services or servers of corporate/organization networks.</p>
+<h4 id=content-spreading>
+<a href=#content-spreading class=heading>Content spreading</a>
+</h4>
+<p>Using P2P technology your bandwidth can help with spreading content to other peers. Scary as it might sound that I could have you help distribute something of my choosing, I have a hard time finding malicious monetization strategies. Maybe it could be used as a covert channel of spreading malware or possibly used in a sequence, by having you spread something illegal this way and then use evidence of that to blackmail you.</p>
+<h3 id=malware-distribution>
+<a href=#malware-distribution class=heading>Malware distribution</a>
+</h3>
+<p>It&rsquo;s not uncommon for malware to be distributed using ad networks. It&rsquo;s in fact so common that blocking ads has been recommended by government agencies as a security measure. Hacking CMSes or injection attacks are also utilized for distribution. The actual malware is commonly loaded from other sources, which is then happily fetched and executed according to our default settings.</p>
+<p>By requiring an establishment of trust before giving away these extended powers, malware would need to be distributed through trusted sources to be as effective. That in turn should also increase legal implications as it&rsquo;s no longer an indirect distribution; incentivizing being a bit more careful. Which should make distribution harder.</p>
+<h3 id=information-leakage>
+<a href=#information-leakage class=heading>Information leakage</a>
+</h3>
+<p>The most common use case is tracking, which is not quite as sinister, but probably not something you actually want. Most services are going to load scripts from a couple different companies with the aim of building a profile of you that is as specific as possible. Mostly because the more detailed they can make this profile; the more money they can charge for showing you ads. This includes keeping track of how long you spend on every part of every page, what you&rsquo;ve searched for, what you liked/disliked, what you put in a cart somewhere or what you bought, along with fingerprinting and other techniques to merge this data with that of your other devices or from other services.</p>
+<p>Maybe that&rsquo;s fine; as a people we&rsquo;ve sort of voted for the alternatives where we are the product. But what happens when this data leaks to more sinister actors? All it takes is a mistake in configuration somewhere or a malicious/blackmailed employee with access to these systems. It will leak, to some extent it has already happened, it just hasn&rsquo;t had a catastrophic enough result yet. What could a more sinister actor do with this?</p>
+<p>What if your government turns into a dictatorship? You could now be punished for having shown interest in a religion, other competing political powers or because you like to eat sandwiches in the morning and your dictator is particularly crazy.</p>
+<p>What if it&rsquo;s accessible for organized crime? How could the information be monetized in darker ways? Parts of it are already being bought/sold, but for businesses it&rsquo;s too profitable to be an information center, so they&rsquo;re protective of it to some extent, perhaps the difference is that it would start being sold as complete, merged profiles without any regard for who the buyer is.</p>
+<p>Those profiles could then be used for identity theft, phishing and blackmail, just to name a few I can think of. Identity theft could be so well targeted that it could prove difficult to clear yourself of crimes committed with it. Phishing campaigns could essentially be very broad and intelligent spear phishing campaigns.</p>
+<h2 id=what-can-you-do-about-it>
+<a href=#what-can-you-do-about-it class=heading>What can you do about it?</a>
+</h2>
+<p>Default to using a more restricted browser, just picking one of the popular ones with <a href=https://noscript.net/ rel=noopener>NoScript</a> extension installed is a good option. With that extension JavaScript and other potentially harmful content is disabled by default and permitted on a per subdomain basis. Pretty much modifying browser defaults to what I think they should be. Most of the time it&rsquo;s just more efficient (faster and less battery/power usage; decreasing environmental impact), you can read the content you&rsquo;re interested in and just ignore tons of scripts, most of the &ldquo;Would you like to be spied on?"-dialogs (cookie consent dialogs) are loaded from external sources so you don&rsquo;t even see them. In cases where you don&rsquo;t just want to ignore badly designed sites though it can be a bit frustrating, resources are loaded from 10-15 different places and you need to figure out which 3 of them are part of loading the content you&rsquo;re interested in.</p>
+<p>Using different browsers for different purposes helps. In it&rsquo;s simplest form this is just different browser installs on the same OS. If that&rsquo;s your approach I&rsquo;d suggest also compartmentalizing it with virtualization to minimize the blast radius when your time comes.</p>
+<h3 id=web-based-is-safer-than-native>
+<a href=#web-based-is-safer-than-native class=heading>Web-based is safer than native</a>
+</h3>
+<p>The web is considered a rather hostile environment and browser developers do a lot of work to secure and isolate them. It&rsquo;s therefore a more restricted environment with less privileges than natively installed applications. Using a web-based alternative is safer than installing a native alternative most of the time. I think the case for picking native applications is when you want to isolate/own the data or need the extra performance or privileges.</p>
+<p>A bit more concretely, none of those apply for most communication tools (like Slack, Teams or Discord), hence I use the web versions of those. For P2P/federated communication tools (like Matrix) where owning and isolating your data is an option however the native alternative might be better. Password managers and version control systems are also in this category. For a game it&rsquo;s mostly about performance, but also about being able to play it after the company sells it or shuts it down (&ldquo;owning&rdquo; it).</p>
+<h3 id=network-level-mitigation>
+<a href=#network-level-mitigation class=heading>Network-level mitigation</a>
+</h3>
+<p>At a network level you could utilize DNS and IP based blocking of malware and trackers. There&rsquo;s tons of regularly updated lists of known malicious services. This type of blocking uses those lists to to redirect all those requests somewhere else. This will help protect all devices on your network and helps with software other than the browser. Do be aware that you might need to jump through some hoops for nasty software that does not respect your advertised or configured DNS settings though.</p>
+<p>Your simplest alternative would be to <a href=https://avoidthehack.com/best-dns-privacy rel=noopener>pick a DNS provider</a> that does the kind of filtering you would like it to.
+If you want more control you can self-host such a service using <a href=https://pi-hole.net/ rel=noopener>pi-hole</a>. Or you can utilize the underlying blacklists in your firewall, where you can also include ip based blocking.</p>
+<p>These rules can&rsquo;t really be as strict though as they&rsquo;re being applied a lot broader and you probably don&rsquo;t want to have to pop into that UI to allow something temporarily while on your phone for example.</p>
+<h3 id=compartmentalize>
+<a href=#compartmentalize class=heading>Compartmentalize</a>
+</h3>
+<p>Utilize virtualization to sort your tasks into compartments, managing virtual machines as a way of isolating them from each other. This strategy assumes a breach and instead tries to minimize the blast radius. Use a disposable or stateless VM for default browsing, separate VMs for client work and separate VMs for admin tasks. You can achieve that with any virtualization configuration of your choice, but the following is how I&rsquo;ve chosen to do it.</p>
+<p><a href=https://www.qubes-os.org/intro/ rel=noopener>Qubes OS</a> is a meta OS based on that idea, you compartmentalize your applications into different types of qubes (preconfigured virtual machines with varying persistence and settings), run all your applications in them and it mostly looks like a regular window manager with labels and colors to help you keep track of qubes and hence trust levels they belong to. The qubes can run whatever OS you want, so if you need to you can have a minimal Windows (LTSC might be an option as it excludes a bunch of components you probably don&rsquo;t need in this setting) install to run a few applications where you need that and it&rsquo;ll be just another window per application in your window manager.</p>
+<p>Tooling for working with and managing these qubes is great and it&rsquo;s a lot more user friendly than it sounds. It&rsquo;s default configuration of qubes is likely a great starting point for you and you can customize it to your liking as you come up with what compartmentalization works best for you. There are a couple of things to get used to when switching:</p>
+<ul>
+<li>copy/paste across qubes adds two steps: ctrl+c -> ctrl+shift+c (copy from vm to host context) -> ctrl+shift+v (copy from host to vm context) -> ctrl+v</li>
+<li>move files across qubes: right click file -> move to other vm (which moves it to QubesIncoming directory of that VM)</li>
+<li>remembering to pass camera, microphone and audio devices to meeting qube</li>
+<li>installations are done in template qubes, not app qubes</li>
+<li>screen sharing is isolated to the qube you&rsquo;re in, unless you add a solution for sharing across qubes <a href=https://github.com/QubesOS/qubes-video-companion rel=noopener>qubes-video-companion</a></li>
+</ul>
+<p>Once you&rsquo;re comfortable with those it&rsquo;s just another OS and you&rsquo;ll mostly be modifying your structure of qubes, where you want to open links by default (like opening mail attachments in a disposable qube for example) and look into GPG/SSH-split setups to minimize the risk of those keys from being compromised along with the qubes where you use them.</p>
+<p>If you&rsquo;re a bit nerdy and being able to configure your OS with code appeals to you; Qubes OS comes with saltstack ready to be enabled and used. I&rsquo;m experimenting with it and will hopefully have a configuration I can showcase with a post and repository at some point.</p>
+<p>Check their <a href=https://www.qubes-os.org/doc/certified-hardware/#hardware-certification-requirements rel=noopener>hardware certification requirements</a>, for a concise description of security considerations regarding hardware and firmware (if you find that interesting you&rsquo;ll be reading linked resources for a while).</p>
+</div>
+<div class=pagination>
+<a href=# class=top>Top</a>
+</div>
+</main>
+<footer>
+<span>
+&copy; <time datetime="2023-11-21 20:29:13.180825741 +0000 UTC m=+0.036810805">2023</time> Kristoffer Lind. Made with <a href=https://gohugo.io rel=noopener>Hugo</a> using the <a href=https://github.com/kristofferlind/tale-hugo/ rel=noopener>Tale</a> theme.
+</span>
+</footer>
+</body>
+</html>
